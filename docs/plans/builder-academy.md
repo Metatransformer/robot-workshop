@@ -168,3 +168,43 @@ motion and safe startup/fault behavior, a testable load/torque calculation,
 troubleshooting and portable source/PDF handoff. Preserve the current concept
 worksheet and mark all hardware observations pending. If primary documentation
 cannot support the chosen configuration, record that gap instead of inventing it.
+
+## Cycle 4 — sensor observations (2026-10-18)
+
+Servo research gate remains open: Adafruit's SG92R product169 documents nominal
+voltage/travel but the reviewed material does not establish startup/stall current
+or input logic thresholds. The generic Pico servo tutorial uses a different servo;
+its wide pulse sweep is not qualification for SG92R. No ratings were invented.
+References: https://www.adafruit.com/product/169 and
+https://learn.adafruit.com/use-dc-stepper-servo-motor-solenoid-rp2040-pico/servo-motors.
+A future servo package must resolve exact variant power/control limits or explicitly
+require measurements before a build-ready claim.
+
+Current slice closes the existing sensor build-to-observation loop instead:
+manual serial CSV import, discontinuity-aware scatter plot, per-segment notes and
+portable JSON/CSV evidence. Closed Sol package sensor-observations.md owns four new
+parser/UI/test files; session64823, /private/tmp/mt-sensor-observations.log.
+Root owns /bench/sensor route, additive Overview/build-guide links, guide capture
+instructions, browser acceptance and critic evidence. Existing files, shopping,
+learning, print and agent actions remain intact. No source project is rewritten;
+new seed guides inherit the added capture instructions. No live USB or inferred
+hardware qualification, no automatic curriculum completion.
+
+Cycle4 completed: /bench/sensor imports the actual starter serial format, separates
+interruptions and clock resets, plots readings with units, keeps per-segment notes,
+and downloads provenance-bearing JSON and readings CSV. Guided from the project
+Overview and buying guide. Sol64823 exited; no implementation worker remains active.
+Root repaired the independent review's data-loss/provenance/plot issues.136 tests,
+typecheck, production build and all three relevant browser journeys passed.
+
+Next concrete package: resolve the servo build's documentation gate with an exact
+candidate comparison. Read primary vendor/datasheet power and signal limits for
+SG92R and at least one better-documented alternative (e.g. Pololu FEETECH FS90,
+https://www.pololu.com/file/0J1435/FS90-specs.pdf). Compare to the exact servo used in
+the Adafruit Pico servo tutorial; distinguish supported examples from guaranteed
+ratings. Record source/date, unresolved values, topology and required bench tests.
+Only then assign a closed guide/firmware package, retaining the current concept
+worksheet. An explicit unresolved measurement is preferable to a fictitious build
+qualification. Keep the next slice narrow; do not add more curriculum breadth to
+avoid this engineering gate. Sensor notebook report restoration remains a later
+usability improvement; current reports are portable artifacts, not restorable state.

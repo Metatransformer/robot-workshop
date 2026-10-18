@@ -60,6 +60,14 @@ First power is USB only. After inspection, connect the data cable without touchi
 Open serial. The firmware already handles 0x76/0x77; do not alter wiring or force an address because either appears. Save the detected-address line, CSV header, rows, and errors. Nearby Pico/USB heat can raise readings, so observe placement and warm-up before treating temperature as ambient.`,
   },
   {
+    title: "Capture and inspect observations",
+    markdown: `Open Inspect sensor readings from the sensor project's Overview or the web build guide. In your serial editor, copy the firmware's CSV header and subsequent output into Serial CSV, or save that text as a CSV/TXT file and import it. Keep comment lines beginning with #, including sensor faults; the inspector retains these diagnostics and separates interrupted recordings. This is a manual text handoff, not a live USB connection.
+
+The supported header is timestamp,temp_c,humidity_pct,pressure_hpa,led. The separate notes/bench-log.csv worksheet has extra columns and is not this serial format. Timestamps are seconds since firmware startup, not calendar times. Inspect each recording segment, compare temperature, humidity and pressure, and record placement, expected versus observed behavior, interruptions and uncertainty in Bench observations. Logged LED states are commanded outputs, not independent confirmation that an LED lit.
+
+Download an observation report to preserve the selected segment, notes, source line numbers and diagnostics; download readings CSV for further analysis. Notes live in the current browser tab until exported. A synthetic example is available for practicing the workflow before hardware arrives. Imported readings remain user-supplied and unverified: a plot alone establishes neither calibration nor successful construction.`,
+  },
+  {
     title: "Diagnostic decision table",
     markdown: `| Observation | Most likely layer to check next | Safe next action |
 | --- | --- | --- |

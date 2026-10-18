@@ -85,3 +85,41 @@ inclusion.125 tests across19 files, typecheck and production build passed.
 Worker stayed within the three-file allowlist; root additive integration is listed
 in the plan. No original seed firmware, wiring, catalog definitions or existing
 project contents were changed. The guide is a supplement, not evidence of assembly.
+
+## Round 4 — observed sensor data, not just predicted behavior
+
+Root investigated the proposed servo follow-up first. Reviewed SG92R supplier
+material did not resolve current demand or logic thresholds; the generic Pico
+servo guide uses another model. That gate remains open. This cycle instead closes
+a useful gap in the better documented sensor starter: bringing serial output back
+into the workshop as user-supplied observations, with faults and resets preserved.
+
+Independent builder_harsh_critic reviewed the closed package and parser during
+implementation. It accepted the separation of synthetic/unverified origin,
+per-segment notes and stale-export gating as the right contract. It confirmed a
+numeric overflow case in the initial parser's mean; final implementation review
+and browser evidence are pending below. This review is not hardware validation.
+
+Round 4 completed: the independent reviewer accepted the final source and actual
+desktop/mobile screenshots. Accepted repairs: scale plot calculations before
+subtracting extreme inputs and label the actual plotted extrema; avoid the cited
+finite-input mean overflow; disable redundant Analyze so it cannot erase notes;
+invalidate pending file reads when the source changes; show analyzed provenance
+separately from draft provenance; call results parsed readings, not validated
+observations. Root enlarged mobile plot labels and made selected-segment export
+scope explicit. Limits and replacement behavior are visible before importing.
+
+Root reproduced 136 unit tests across20 files, typecheck and production build.
+The two observation browser cases passed: source lines and summary in downloaded
+JSON, separate segment notes, stale export gating, synthetic origin, file upload,
+invalid header,390px width, and a deliberately delayed File.text() completion
+that cannot overwrite newer analysis/notes. The existing procurement browser case
+also passed with PDF extraction and new-project guide inclusion. Initial browser
+failures were test selectors: nested label contents include form values, so checks
+now use accessible textbox/combobox roles. Final screenshots were visually reviewed.
+
+Worker64823 finished; root audited its four-file allowlist and reproduced checks.
+Root's additive route/navigation/guide integration preserves original actions and
+existing source projects. No purchase, live serial connection, flashing, external
+publication or hardware validation occurred. This slice supplies portable selected
+segment JSON/CSV reports; it does not yet restore reports into the notebook.

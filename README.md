@@ -58,6 +58,13 @@ at `/build-guides/sensor`: exact supplier candidates, cable/header choices, pack
 versus used quantities, breadboard checks, and source-bundle handoff. New sensor
 projects include the same `BUY_AND_BUILD.md`; existing project files stay intact.
 
+At `/bench/sensor`, paste or import the starter firmware’s serial CSV, inspect
+separate recording segments and scatter plots, and export readings plus bench
+observations. Diagnostics and source line numbers remain in the JSON report.
+This is a browser-local manual capture workflow; notes must be exported before
+closing the tab. Synthetic examples and user-supplied readings are distinguished;
+imports do not establish calibration or successful hardware assembly.
+
 ## Learn, investigate, and test
 
 Open `/learn` for 48 applied modules across measurement, electronics, mechanics,
