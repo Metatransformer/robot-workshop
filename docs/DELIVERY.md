@@ -2,8 +2,9 @@
 
 Delivered as a local-first workshop in /Users/nickbryant/robot-workshop. The autonomous
 improvement loop is paused at the user's request to finish and deliver. No further
-expansion is scheduled. This is a usable prototype, not a published or physically
-validated engineering product.
+expansion is scheduled. This is a usable prototype, not a physically validated engineering product.
+A hosted showcase was subsequently deployed at the user’s request; local agent and
+project-file operations remain local-only.
 
 ## Start here
 
@@ -68,9 +69,19 @@ before publishing. No Supabase cloud credentials are needed by this local protot
 The final verification and checkpoint are recorded in reviews/builder-critic-log.md.
 That log includes independent critique, fixes, browser/PDF checks and test limits.
 Plans and work packages remain under docs/plans and docs/work-packages. Changes were
-reviewed and committed locally; nothing was pushed or published.
+reviewed and committed locally. A later Vercel showcase deployment publishes the
+learning, lab and guide surfaces; local workspace files are excluded from upload.
 
 Browser QA creates clearly labeled synthetic projects in the test workshop. Keep
 those separate from actual bench evidence. User projects were not overwritten.
 Before a first physical build, confirm received part identities, headers, cable,
 resistor and instruments against the guide, then follow its staged acceptance checks.
+
+## Hosted showcase — October 18, 2026
+
+https://metatransformer-site-zeta.vercel.app is deployed to the existing
+metatransformer-site Vercel project. Nine public routes returned HTTP 200 without
+login, the LED worksheet calculated a record in a fresh browser, and no browser
+runtime errors occurred. The local API returns 403 on the hosted deployment.
+Build/typecheck, five focused access tests and a 390px production-layout check
+passed. The upload excludes workspace data, environment files and internal docs.

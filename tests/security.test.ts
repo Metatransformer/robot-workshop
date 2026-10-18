@@ -19,6 +19,10 @@ describe("local access", () => {
     vi.stubEnv("METATRANSFORMER_MODE", "hosted");
     expect(() => verifyLocalEntry(request().headers)).toThrow("disabled");
   });
+  it("blocks local access on Vercel even with a local Host and valid token", () => {
+    vi.stubEnv("VERCEL", "1");
+    expect(() => verifyApiRequest(request())).toThrow("disabled");
+  });
   it("bounds streamed bodies even without content length", async () => {
     const make = (text: string) => new Request("http://localhost", { method: "POST", headers: { "content-type": "application/json" }, body: text });
     await expect(boundedJson(make('{"ok":true}'))).resolves.toEqual({ ok: true });

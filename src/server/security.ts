@@ -12,7 +12,7 @@ function permittedHosts(): Set<string> {
   return new Set([`localhost:${port}`, `127.0.0.1:${port}`, `[::1]:${port}`]);
 }
 export function verifyLocalEntry(headers: Headers): void {
-  if (process.env.METATRANSFORMER_MODE === "hosted") throw new WorkshopError("The local workshop is disabled on this host.", 403, "LOCAL_ONLY");
+  if (process.env.VERCEL === "1" || process.env.METATRANSFORMER_MODE === "hosted") throw new WorkshopError("The local workshop is disabled on this host.", 403, "LOCAL_ONLY");
   if (!permittedHosts().has(headers.get("host") || "")) throw new WorkshopError("Open this workshop on its configured localhost address.", 403, "LOCAL_ONLY");
   if (headers.get("sec-fetch-site") === "cross-site") throw new WorkshopError("Cross-site workshop access is blocked.", 403, "CROSS_SITE");
   const origin = headers.get("origin");
