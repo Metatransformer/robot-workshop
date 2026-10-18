@@ -74,6 +74,13 @@ differential-tested against the exported Python controller; it models commands,
 not servo angle, torque, electrical load or physical validation. Links from the
 build guide, PWM lesson and labs connect the exercise to the actual starter.
 
+At `/labs/sensor-wiring`, inspect four Pico/BME280 connection diagrams, diagnose
+swapped signals, missing ground or a wrong supply endpoint, and choose an unpowered
+check. A separate breadboard exercise teaches isolated five-contact strips. Physical
+pin numbers and GPIO names are shown separately, with manufacturer references.
+This compares the starter's four connections; it does not simulate electrical
+behavior or certify real wiring. Open it from the sensor guide or I2C lesson.
+
 At `/bench/sensor`, paste or import the starter firmware’s serial CSV, inspect
 separate recording segments and scatter plots, and export readings plus bench
 observations. Diagnostics and source line numbers remain in the JSON report.

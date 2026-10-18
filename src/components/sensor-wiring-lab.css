@@ -1,0 +1,193 @@
+.sensor-wiring-shell {
+  --sensor-wiring-cream: #f3efe4;
+  --sensor-wiring-paper: #fffdf7;
+  --sensor-wiring-ink: #172a22;
+  --sensor-wiring-green: #1f5b43;
+  --sensor-wiring-green-dark: #113c2b;
+  --sensor-wiring-sage: #dce9df;
+  --sensor-wiring-rust: #ad4f2d;
+  --sensor-wiring-rust-soft: #f6dfd2;
+  --sensor-wiring-gold: #c89432;
+  --sensor-wiring-line: #c8c9bd;
+  min-height: 100vh;
+  background: var(--sensor-wiring-cream);
+  color: var(--sensor-wiring-ink);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.sensor-wiring-shell *, .sensor-wiring-shell *::before, .sensor-wiring-shell *::after { box-sizing: border-box; }
+
+.sensor-wiring-header {
+  min-height: 68px;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  border-bottom: 1px solid #385347;
+  background: var(--sensor-wiring-green-dark);
+  color: #fff;
+}
+
+.sensor-wiring-brand {
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  border-right: 1px solid #385347;
+  color: white;
+  font: 700 .76rem/1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  letter-spacing: .08em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.sensor-wiring-header nav { display: flex; align-items: stretch; padding-right: 12px; }
+.sensor-wiring-header nav a {
+  display: flex;
+  align-items: center;
+  padding: 0 13px;
+  border-bottom: 3px solid transparent;
+  color: #d0ded6;
+  font-size: .68rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+.sensor-wiring-header nav a:hover, .sensor-wiring-header nav a:focus-visible { border-color: var(--sensor-wiring-gold); color: white; }
+
+.sensor-wiring-main { width: min(100% - 48px, 1080px); margin: 0 auto; padding: 60px 0 90px; }
+.sensor-wiring-intro { max-width: 880px; padding-bottom: 38px; border-bottom: 1px solid var(--sensor-wiring-line); }
+.sensor-wiring-kicker { margin: 0; color: var(--sensor-wiring-rust); font-size: .64rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.sensor-wiring-intro h1 { max-width: 780px; margin: 12px 0 18px; font: 600 clamp(2.8rem, 7vw, 5.6rem)/.95 Georgia, "Times New Roman", serif; letter-spacing: -.055em; }
+.sensor-wiring-intro > p:last-child { max-width: 800px; margin: 0; color: #45564e; font: 1.08rem/1.7 Georgia, serif; }
+
+.sensor-wiring-unpowered-note {
+  display: grid;
+  grid-template-columns: minmax(180px, .45fr) minmax(0, 1fr);
+  gap: 26px;
+  margin-top: 34px;
+  padding: 23px 26px;
+  border-left: 5px solid var(--sensor-wiring-rust);
+  background: var(--sensor-wiring-paper);
+  box-shadow: 7px 7px 0 #ded7c8;
+}
+.sensor-wiring-unpowered-note strong { font: 600 1.25rem/1.25 Georgia, serif; }
+.sensor-wiring-unpowered-note p { margin: 0; color: #4e5d55; font-size: .72rem; line-height: 1.65; }
+
+.sensor-wiring-inspection, .sensor-wiring-answer { padding-top: 66px; }
+.sensor-wiring-section-heading { display: flex; align-items: center; gap: 15px; margin-bottom: 28px; }
+.sensor-wiring-section-heading > span { width: 44px; height: 44px; display: grid; place-items: center; flex: 0 0 auto; background: var(--sensor-wiring-green); color: white; font-size: .68rem; font-weight: 800; }
+.sensor-wiring-section-heading p { margin: 0 0 4px; color: var(--sensor-wiring-rust); font-size: .61rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+.sensor-wiring-section-heading h2 { margin: 0; font: 600 1.8rem/1.05 Georgia, "Times New Roman", serif; }
+
+.sensor-wiring-case-select { display: grid; grid-template-columns: auto minmax(230px, 400px); align-items: center; gap: 14px; margin-bottom: 16px; color: #394b42; font-size: .72rem; font-weight: 800; }
+.sensor-wiring-case-select select { min-height: 46px; padding: 0 38px 0 12px; border: 1px solid #92988f; border-radius: 0; background: var(--sensor-wiring-paper); color: var(--sensor-wiring-ink); font: inherit; }
+
+.sensor-wiring-schematic { margin: 0; padding: 20px; border: 1px solid var(--sensor-wiring-line); background: var(--sensor-wiring-paper); }
+.sensor-wiring-schematic svg { width: 100%; height: auto; display: block; overflow: visible; }
+.sensor-wiring-board-block { fill: #e4e8df; stroke: #839086; stroke-width: 1.5; }
+.sensor-wiring-board-title { fill: var(--sensor-wiring-green-dark); font-size: 14px; font-weight: 800; letter-spacing: .03em; }
+.sensor-wiring-endpoint-labels { fill: #293e34; font-size: 14px; font-weight: 750; }
+.sensor-wiring-wire { fill: none; stroke-width: 4; }
+.sensor-wiring-wire.is-signal { stroke: var(--sensor-wiring-green); }
+.sensor-wiring-wire.is-supply { stroke: var(--sensor-wiring-rust); stroke-dasharray: 10 5; }
+.sensor-wiring-wire.is-ground { stroke: #4d5551; stroke-dasharray: 3 5; }
+.sensor-wiring-wire-dot.is-signal { fill: var(--sensor-wiring-green); }
+.sensor-wiring-wire-dot.is-supply { fill: var(--sensor-wiring-rust); }
+.sensor-wiring-wire-dot.is-ground { fill: #4d5551; }
+.sensor-wiring-schematic figcaption { margin-top: 10px; color: #59675f; font-size: .63rem; line-height: 1.55; }
+
+.sensor-wiring-table-wrap { margin-top: 14px; overflow-x: auto; }
+.sensor-wiring-connection-table { width: 100%; border-collapse: collapse; background: var(--sensor-wiring-paper); font-size: .69rem; }
+.sensor-wiring-connection-table caption { padding: 0 0 9px; color: var(--sensor-wiring-ink); font: 700 1rem Georgia, serif; text-align: left; }
+.sensor-wiring-connection-table th, .sensor-wiring-connection-table td { width: 50%; padding: 11px 13px; border: 1px solid var(--sensor-wiring-line); text-align: left; }
+.sensor-wiring-connection-table th { background: #e5e4da; font-size: .6rem; letter-spacing: .05em; text-transform: uppercase; }
+.sensor-wiring-table-note { margin: 8px 0 0; color: #5a665f; font-size: .62rem; line-height: 1.5; }
+
+.sensor-wiring-reference { margin-top: 18px; border: 1px solid var(--sensor-wiring-line); background: var(--sensor-wiring-paper); }
+.sensor-wiring-reference summary { padding: 16px 18px; color: var(--sensor-wiring-green-dark); font: 700 .74rem/1.3 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; cursor: pointer; }
+.sensor-wiring-reference[open] summary { border-bottom: 1px solid var(--sensor-wiring-line); }
+.sensor-wiring-reference > p, .sensor-wiring-reference > .sensor-wiring-netlist { margin-right: 20px; margin-left: 20px; }
+.sensor-wiring-reference > p { color: #4d5d54; font-size: .68rem; line-height: 1.65; }
+.sensor-wiring-reference > p:last-child { margin-bottom: 20px; }
+.sensor-wiring-netlist { margin-top: 12px; margin-bottom: 12px; padding-left: 20px; color: #2d493b; font-size: .66rem; line-height: 1.65; }
+
+.sensor-wiring-answer { margin-top: 28px; border-top: 1px solid var(--sensor-wiring-line); }
+.sensor-wiring-answer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.sensor-wiring-answer fieldset { min-width: 0; margin: 0; padding: 22px; border: 1px solid var(--sensor-wiring-line); background: var(--sensor-wiring-paper); }
+.sensor-wiring-answer legend, .sensor-wiring-breadboard-question legend { padding: 0 7px; color: var(--sensor-wiring-rust); font-size: .63rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.sensor-wiring-radio-list { display: grid; gap: 8px; }
+.sensor-wiring-radio-list label { min-height: 58px; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 11px; padding: 10px 12px; border: 1px solid #babbb2; background: #faf8f0; cursor: pointer; }
+.sensor-wiring-radio-list label:hover { border-color: var(--sensor-wiring-gold); }
+.sensor-wiring-radio-list label.is-selected { border-color: var(--sensor-wiring-green); background: var(--sensor-wiring-sage); box-shadow: inset 4px 0 0 var(--sensor-wiring-green); }
+.sensor-wiring-radio-list input { width: 18px; height: 18px; margin: 0; accent-color: var(--sensor-wiring-green); }
+.sensor-wiring-radio-list span { font-size: .69rem; font-weight: 750; line-height: 1.45; }
+
+.sensor-wiring-button { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; padding: 0 17px; border: 1px solid #8c958e; border-radius: 0; background: var(--sensor-wiring-paper); color: var(--sensor-wiring-ink); font: 800 .68rem/1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; cursor: pointer; }
+.sensor-wiring-button:hover:not(:disabled) { border-color: var(--sensor-wiring-rust); }
+.sensor-wiring-button:disabled { cursor: not-allowed; opacity: .47; }
+.sensor-wiring-button.is-primary { margin-top: 18px; border-color: var(--sensor-wiring-green); background: var(--sensor-wiring-green); color: white; }
+.sensor-wiring-button.is-primary:hover:not(:disabled) { background: var(--sensor-wiring-green-dark); }
+
+.sensor-wiring-feedback { margin-top: 18px; padding: 24px; border-top: 5px solid var(--sensor-wiring-green); background: var(--sensor-wiring-paper); box-shadow: 8px 8px 0 #ddd7c9; }
+.sensor-wiring-verdict { margin: 0 0 18px; font: 600 1.55rem/1.2 Georgia, serif; }
+.sensor-wiring-feedback-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.sensor-wiring-feedback-grid section { padding: 18px; border-left: 4px solid; }
+.sensor-wiring-feedback-grid section.is-correct { border-color: var(--sensor-wiring-green); background: var(--sensor-wiring-sage); }
+.sensor-wiring-feedback-grid section.is-incorrect { border-color: var(--sensor-wiring-rust); background: var(--sensor-wiring-rust-soft); }
+.sensor-wiring-feedback h3 { margin: 0 0 8px; font: 600 1.05rem/1.2 Georgia, serif; }
+.sensor-wiring-feedback-grid p, .sensor-wiring-feedback-boundary { margin: 0; color: #40534a; font-size: .67rem; line-height: 1.62; }
+.sensor-wiring-netlist-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin-top: 18px; border: 1px solid var(--sensor-wiring-line); background: var(--sensor-wiring-line); }
+.sensor-wiring-netlist-compare > div { padding: 16px; background: #faf8f0; }
+.sensor-wiring-netlist-compare h3 { font-size: .95rem; }
+.sensor-wiring-netlist-compare .sensor-wiring-netlist { margin-bottom: 0; }
+.sensor-wiring-feedback-boundary { margin-top: 15px; padding-top: 13px; border-top: 1px solid var(--sensor-wiring-line); font-weight: 750; }
+
+.sensor-wiring-breadboard { display: grid; grid-template-columns: minmax(0, .9fr) minmax(360px, 1.1fr); gap: 28px 42px; margin-top: 76px; padding: 32px; border-top: 5px solid var(--sensor-wiring-gold); background: var(--sensor-wiring-paper); box-shadow: 9px 9px 0 #ded7c8; }
+.sensor-wiring-breadboard h2, .sensor-wiring-sources h2 { margin: 8px 0 11px; font: 600 1.65rem/1.12 Georgia, serif; }
+.sensor-wiring-breadboard > div:first-child > p:last-child, .sensor-wiring-sources > p:last-child { margin: 0; color: #4b5b52; font-size: .7rem; line-height: 1.65; }
+.sensor-wiring-breadboard-diagram { align-self: center; padding: 20px 22px; border: 1px solid var(--sensor-wiring-line); background: #ede8da; }
+.sensor-wiring-breadboard-labels { display: grid; grid-template-columns: repeat(5, 1fr) 22px repeat(5, 1fr); margin-left: 34px; color: #59635d; font-size: .59rem; text-align: center; text-transform: uppercase; }
+.sensor-wiring-breadboard-row { display: grid; grid-template-columns: 27px repeat(5, 1fr) 22px repeat(5, 1fr); align-items: center; gap: 3px; margin-top: 9px; }
+.sensor-wiring-breadboard-row b { color: #526159; font-size: .59rem; }
+.sensor-wiring-breadboard-row span { width: 15px; height: 15px; justify-self: center; border: 3px solid #c1b9a9; border-radius: 50%; background: #38463f; }
+.sensor-wiring-breadboard-row span.is-origin { border-color: var(--sensor-wiring-rust); background: var(--sensor-wiring-rust); box-shadow: 0 0 0 3px #fff; }
+.sensor-wiring-breadboard-row i { height: 26px; border-right: 2px dashed #988e7c; border-left: 2px dashed #988e7c; }
+.sensor-wiring-breadboard-question { grid-column: 1 / -1; min-width: 0; margin: 0; padding: 20px; border: 1px solid var(--sensor-wiring-line); }
+.sensor-wiring-breadboard-options { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.sensor-wiring-breadboard-options label { min-width: 90px; display: flex; align-items: center; gap: 8px; padding: 11px 13px; border: 1px solid #b9b9ae; background: #faf8f0; font-size: .7rem; font-weight: 800; cursor: pointer; }
+.sensor-wiring-breadboard-options input { accent-color: var(--sensor-wiring-green); }
+.sensor-wiring-breadboard-feedback { grid-column: 1 / -1; padding: 16px 18px; border-left: 4px solid; font-size: .67rem; line-height: 1.62; }
+.sensor-wiring-breadboard-feedback.is-correct { border-color: var(--sensor-wiring-green); background: var(--sensor-wiring-sage); }
+.sensor-wiring-breadboard-feedback.is-incorrect { border-color: var(--sensor-wiring-rust); background: var(--sensor-wiring-rust-soft); }
+
+.sensor-wiring-sources { margin-top: 70px; padding-top: 28px; border-top: 1px solid var(--sensor-wiring-line); }
+.sensor-wiring-source-links { display: flex; flex-wrap: wrap; gap: 9px; margin: 17px 0; }
+.sensor-wiring-source-links a { min-height: 42px; display: inline-flex; align-items: center; padding: 0 13px; border: 1px solid var(--sensor-wiring-green); background: var(--sensor-wiring-paper); color: var(--sensor-wiring-green-dark); font-size: .64rem; font-weight: 750; text-decoration: none; }
+.sensor-wiring-source-links a:hover { background: var(--sensor-wiring-sage); }
+
+@media (max-width: 780px) {
+  .sensor-wiring-header { align-items: stretch; flex-direction: column; }
+  .sensor-wiring-brand { min-height: 58px; border-right: 0; border-bottom: 1px solid #385347; }
+  .sensor-wiring-header nav { min-height: 50px; overflow-x: auto; padding: 0 8px; }
+  .sensor-wiring-header nav a { flex: 0 0 auto; padding: 0 10px; }
+  .sensor-wiring-unpowered-note, .sensor-wiring-answer-grid, .sensor-wiring-feedback-grid, .sensor-wiring-netlist-compare, .sensor-wiring-breadboard { grid-template-columns: 1fr; }
+  .sensor-wiring-breadboard { gap: 24px; }
+  .sensor-wiring-breadboard-question, .sensor-wiring-breadboard-feedback { grid-column: auto; }
+}
+
+@media (max-width: 520px) {
+  .sensor-wiring-main { width: min(100% - 24px, 1080px); padding-top: 42px; }
+  .sensor-wiring-intro h1 { font-size: 3rem; }
+  .sensor-wiring-unpowered-note, .sensor-wiring-schematic, .sensor-wiring-answer fieldset, .sensor-wiring-feedback, .sensor-wiring-breadboard { padding: 18px 15px; }
+  .sensor-wiring-case-select { grid-template-columns: 1fr; gap: 7px; }
+  .sensor-wiring-case-select select { width: 100%; }
+  .sensor-wiring-schematic { overflow-x: auto; }
+  .sensor-wiring-schematic svg { min-width: 650px; }
+  .sensor-wiring-connection-table { font-size: .63rem; }
+  .sensor-wiring-connection-table th, .sensor-wiring-connection-table td { min-width: 180px; }
+  .sensor-wiring-button.is-primary, .sensor-wiring-source-links a { width: 100%; }
+  .sensor-wiring-breadboard-diagram { overflow-x: auto; padding: 16px 12px; }
+  .sensor-wiring-breadboard-labels, .sensor-wiring-breadboard-row { min-width: 330px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sensor-wiring-shell *, .sensor-wiring-shell *::before, .sensor-wiring-shell *::after { scroll-behavior: auto !important; transition: none !important; }
+}

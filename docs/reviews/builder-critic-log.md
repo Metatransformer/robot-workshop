@@ -270,3 +270,37 @@ existing board endpoints and an explicit netlist. Teach physical pin versus GPIO
 name, SDA/SCL swap, missing common ground and an incorrect supply endpoint with
 unpowered checks. It must not claim electrical simulation or approval of arbitrary
 wiring; verify exact variants before authoring the fault explanations.
+
+
+## Round 9 — inspect the sensor wiring before power
+
+Added /labs/sensor-wiring: four neutral connection cases for the original Pico
+and Adafruit BME280 starter, physical pin/GPIO labels, accessible connection table,
+separate diagnosis and unpowered-check feedback, and a breadboard strip exercise.
+Official Pico and Adafruit pinouts were reread; sources are linked in the lesson.
+Existing guide, starter, lesson and lab destinations remain; links are additive.
+No electrical solver, powered fault testing or hardware approval is claimed.
+
+Independent critic identified that tracing all four paths is valid for every fault;
+root accepted that answer alongside the targeted check. Root isolated all new CSS
+classes to avoid collisions with the existing sensor notebook, clarified horizontal
+scrolling on mobile, and added exact physical-pin assertions. A mechanical prefix
+edit briefly broke the model import; typecheck/build caught it and it was repaired.
+The fresh browser inspection then exposed an SVG title hydration mismatch: a
+multi-child title was replaced with one string. The final E2E now reloads the route
+and asserts no page errors; it passed after the repair.
+
+Root reproduced 174 tests across 26 files, typecheck, production build and three
+sensor browser journeys covering existing notebook flows and the new wiring lesson.
+The final wiring rerun passed all four cases, broad checks, rejected powered testing,
+breadboard feedback, mobile overflow and lesson discoverability. Independent actual
+source and desktop/mobile review accepted with no material blocker; small mobile
+body type remains presentation debt. Worker stayed within its four-file allowlist;
+root reviewed implementation and additive integration. No purchases, publication,
+flashing or physical measurements occurred.
+
+Next bounded package: a separate sensor-project LED indicator variant. Research an
+exact documented LED/resistor and Pico output constraints; connect nominal-current
+calculation, GPIO wiring and threshold firmware, with a deliberate startup test.
+Distinguish commanded GPIO state from observed illumination. Preserve existing
+sensor template and observation format. No automatic hardware-validation claims.

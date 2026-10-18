@@ -337,3 +337,28 @@ Prefer new isolated model/component/test files with root-owned route/guide links
 Acceptance: trace every endpoint, distinguish GPIO from physical numbering, explain
 why color is insufficient, and choose a continuity/label check before applying power.
 Have independent critic inspect actual diagram/mobile and source-backed explanations.
+
+## Cycle 9 — trace the sensor's wiring before power (2026-10-18)
+
+Sol1009 executes sensor-wiring-practice.md with4newfiles only; root owns route,
+additive guide/lesson/lab links, browser checks, docs and independent review. Exact
+mapping reread in official Pico pinout and Adafruit BME280 pinout. Deliberate wrong
+supply endpoint is GP2physical4, not an unsupported claim that every alternate VIN
+voltage is invalid. Four neutral case labels, diagnosis and unpowered check answers,
+plus a generic five-contact-strip exercise; schematic not physical board placement.
+
+
+Cycle 9 complete: four wiring cases and the breadboard exercise are linked from the
+sensor guide, digital-interfaces lesson and labs. Root fixed broad-check grading,
+CSS isolation and a browser-detected SVG title hydration mismatch. Verified 174
+unit tests, typecheck, production build, existing sensor browser flows and the final
+wiring journey with reload/no-page-error assertions. Independent source and actual
+desktop/mobile critic accepted. No physical validation was performed.
+
+Next concrete package: research and specify an external LED indicator as a separate
+sensor starter variant, preserving existing projects and the observation format.
+Use an exact LED and resistor with source-backed current/GPIO limits, a nominal
+calculation with assumptions, wiring and threshold firmware with startup test.
+Keep commanded output separate from actual illumination and bench measurements.
+Decompose into closed model/firmware and UI work packages before execution; do not
+expand into a general electronics simulator or a new hardware platform.
