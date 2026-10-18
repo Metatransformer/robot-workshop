@@ -61,3 +61,11 @@ and connectors, selection criteria and source date. A conceptual lesson never
 silently produces an approved order. No purchases or affiliate tracking added.
 
 Supplier identity review: [Adafruit product 169](https://www.adafruit.com/product/169) names **TowerPro SG92R**; TowerPro is the manufacturer and Adafruit the seller. Corrected the supplier mapping, without changing existing user catalog entries. Pico starter purchasing notes explicitly identify the original non-wireless board; see [Pico product family](https://www.raspberrypi.com/products/raspberry-pi-pico/).
+
+## Sensor procurement handoff, checked 2026-10-18
+
+Exact starter order candidates: Adafruit 4883 (original Pico, two loose 20-pin male headers), 2652 (BME280 breakout), 239 (830-point breadboard), 758 (40 male/male jumpers, four used), 592 (USB-A/Micro-B) or 3878 (USB-C/Micro-B), optional 392 (backup 36-pin 0.1-inch male strips, ten-pack). Product pages are https://www.adafruit.com/product/ followed by those IDs. Availability is dynamic and not promised; no prices captured in the application. The Pico product explicitly describes loose headers; the BME280 assembly guide explains long pins down and soldering. The 3002 header product was inspected and rejected: it is a Feather 12/16-pin set, not the chosen Pico header route.
+
+Assembly reference: https://learn.adafruit.com/adafruit-bme280-humidity-barometric-pressure-temperature-sensor-breakout/assembly . Full guide preserves the seed's GP0/GP1 I2C0 wiring and USB-only power; this procurement review does not validate real hardware.
+
+Direct pinout references verified for the handoff: https://cdn-shop.adafruit.com/product-files/4883/4864_Pico-R3-A4-Pinout.pdf and https://learn.adafruit.com/adafruit-bme280-humidity-barometric-pressure-temperature-sensor-breakout/pinouts . GP0/GP1 are physical1/2;3V3OUT and GND are36/38. BME VIN is the selected input, not the separate3Vo regulator output. The guide links these at the assembly step and in its printed sources.

@@ -1,5 +1,6 @@
 import { addLearningLinks, getLearningFiles } from "./learning";
 import type { CatalogItem, ModelKind, Template } from "./contracts";
+import { sensorBuildGuideMarkdown } from "./sensor-build-guide";
 
 const SEEDED_AT = "2026-10-17T00:00:00.000Z";
 
@@ -387,6 +388,7 @@ Record software version, ambient temperature, power source, workload, temperatur
     partIds: ["raspberry-pi-pico", "adafruit-bme280", "generic-breadboard", "generic-usb-data-cable", "generic-jumper-wires", "tool-digital-multimeter", "tool-soldering-iron"],
     parameters: {},
     files: {
+      "BUY_AND_BUILD.md": sensorBuildGuideMarkdown,
       "README.md": `# Pico + BME280 temperature indicator
 
 Build a USB-powered environmental monitor that logs temperature, humidity, and pressure once per second. The original Raspberry Pi Pico's onboard GP25 LED turns on at or above 28 °C, stays in its previous state between 26 °C and 28 °C, and turns off at or below 26 °C. No external LED or light driver is used. This template has been researched and coded, but not physically assembled or measured.

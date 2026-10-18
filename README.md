@@ -53,6 +53,11 @@ recorded-owned, and remaining quantities. Review the variant notes and complete 
 consumables list before ordering through the supplier. Prices, availability, carts,
 payment and affiliate fulfillment are not integrated.
 
+The sensor starter has a [buying and assembly supplement](src/lib/sensor-build-guide.ts)
+at `/build-guides/sensor`: exact supplier candidates, cable/header choices, package
+versus used quantities, breadboard checks, and source-bundle handoff. New sensor
+projects include the same `BUY_AND_BUILD.md`; existing project files stay intact.
+
 ## Learn, investigate, and test
 
 Open `/learn` for 48 applied modules across measurement, electronics, mechanics,

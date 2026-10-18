@@ -59,3 +59,29 @@ Next product priority remains one complete physical build: exact variant BOM inc
 Final root gates: 122 tests across 18 files passed; typecheck and production build passed. All 11 browser cases passed (10 in the final suite, the fast-GPIO case on focused rerun after fixing a test-only case-sensitive field selector). This includes real supplier links → sensor starter, preserved original workshop flows, selected-file sensor PDF with literal firmware, learning restoration/mobile/blocked storage, simulation run restoration, dirty export prevention, consistent motor preview, power calculation and dense GPIO trace handling. Rendered and visually inspected the actual lesson and sensor packet PDFs. The first browser launch was sandbox-blocked; the authorized unsandboxed run completed normally.
 
 All worker changes stayed within the aggregate planned file inventory; root integration preserves original workshop actions. This is a local checkpoint, not a public release or a physically validated build. Next work should prioritize a complete purchasing/assembly handoff for the sensor project and then one integrated servo/display example.
+
+## Round 3 — sensor procurement supplement
+
+Independent builder_harsh_critic reviewed the actual guide source and primary
+supplier/assembly documentation. Conditional pass: parts and four-wire route are
+coherent; package counts and soldering requirements are explicit. Reviewer found
+(1) printed guide needs companion-file/source-bundle handoff because the web action
+is hidden in print, and (2) wiring step needs direct pinout references. Root also
+caught ambiguous '2x20' header wording and the unnecessary journey from purchase
+rows to bottom-of-page links. These are accepted fixes before checkpoint.
+
+Review limitation: the reviewer had no browser provider, so its review was source
+and documentation only. Root independently ran the real browser journey through
+object study → guide → PDF → new sensor project and confirmed BUY_AND_BUILD.md is
+included. Final checks will follow the content repairs. No physical build occurred.
+
+Round 3 completion: root corrected header count to two separate20-pin strips,
+added inline product links and fallback selection criteria, added the companion
+source-bundle handoff, and linked both exact pinout references at the wiring step
+with VIN-versus-3Vo distinction. Reviewer then inspected rendered PDF pages1–2
+and accepted this slice without a remaining blocker. Root checked actual browser
+navigation,390px mobile width, PDF text and appearance, and new-project file
+inclusion.125 tests across19 files, typecheck and production build passed.
+Worker stayed within the three-file allowlist; root additive integration is listed
+in the plan. No original seed firmware, wiring, catalog definitions or existing
+project contents were changed. The guide is a supplement, not evidence of assembly.

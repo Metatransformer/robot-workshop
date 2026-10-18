@@ -148,6 +148,7 @@ export default function ObjectExplorer({ initialObjectId }: ObjectExplorerProps)
 
         <section className="continue-section" aria-labelledby="continue-title">
           <div className="section-intro"><span>04</span><div><h2 id="continue-title">Learn and source deliberately</h2><p>Lessons explain the transferable concepts. Supplier links identify exact candidates; they are not approval, availability, or a completed order.</p></div></div>
+          {selected.id === "thermostat" && <p><a href="/build-guides/sensor">Sensor shopping and assembly guide →</a></p>}
           <p><a href={`/?template=${selected.id === "thermostat" ? "sensor" : selected.id === "barrier" ? "desk-robot" : "blank"}`}>{selected.id === "thermostat" ? "Open the Pico + BME280 starter" : "Start a project plan for this idea"} →</a></p>
           <div className="continue-grid">
             <section><h3>Prerequisite lessons</h3><div className="lesson-links">{selected.prerequisites.map((id) => <a key={id} href={`/learn?lesson=${id}`}>{id.replaceAll("-", " ")} <span aria-hidden="true">→</span></a>)}</div></section>
