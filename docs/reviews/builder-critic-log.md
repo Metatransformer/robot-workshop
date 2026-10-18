@@ -123,3 +123,44 @@ Root's additive route/navigation/guide integration preserves original actions an
 existing source projects. No purchase, live serial connection, flashing, external
 publication or hardware validation occurred. This slice supplies portable selected
 segment JSON/CSV reports; it does not yet restore reports into the notebook.
+
+
+## Round 5 — an exact unloaded servo bench
+
+Delivered a separate Pico + FEETECH FS90 starter, preserving the original SG92R
+concept and existing user projects. Selection research records the seller's
+explicit 3.3 V signal support and conflicting current figures without claiming a
+guaranteed current limit. The guide includes supplier candidates, wiring nets,
+connector preparation, required tools, staged checks, firmware handoff and an
+empty bench log. No hardware measurements were invented.
+
+Independent builder_harsh_critic reviewed the actual firmware and guide. Repairs:
+throttle serial telemetry; remove printing before PWM shutdown; make the external
+negative junction and separate Pico reference lead explicit; require a multimeter;
+provide a concrete servo connector reference; identify both firmware files. Root
+also corrected the button dimensions and linked project documents. Reviewer
+accepted the final source and rendered PDF topology and handoff without a remaining
+material blocker. Acceptance covers an unloaded prototype's documentation and
+tested software, not a completed physical build.
+
+Root found that newly introduced template parts were missing from older catalog
+files. Sol29902 added missing BOM snapshots only during explicit project creation,
+with a regression preserving customized inventory, old manifests and duplicate-free
+repeat creation. Root refreshed only the Studio library afterward, preserving the
+selected project and drafts. Browser acceptance simulates an initial catalog with
+FS90 absent and verifies it appears after creation without reloading.
+
+Root reproduced 146 tests across22 files, typecheck and production build. The
+servo browser journey passed with PDF text extraction, desktop/mobile screenshots,
+390px width, starter creation, both firmware files, buying guide, learning path and
+catalog refresh. Exported Python is exercised via CPython and fake hardware for
+startup/release/rearm/timeout, telemetry and partial-initialization cleanup; this
+is not CircuitPython-on-board validation. A first browser mock used the wrong API
+envelope and failed; the corrected envelope passed. One earlier unconstrained
+unit run hit an I/O timeout; the complete two-worker run passed without weakening
+that test. All three Sol packages finished and root audited the actual allowlists
+and integration hunks. No purchase, flashing or external publication occurred.
+
+Next: restore exported sensor observation reports into the notebook, retaining
+provenance and notes without silently replacing unsaved work. Keep physical servo
+validation explicitly pending; do not expand curriculum breadth to hide that gap.

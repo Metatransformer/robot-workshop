@@ -47,14 +47,19 @@ describe("verified supplier identities", () => {
     fan3368: ["Adafruit", "Miniature 5 V cooling fan", "https://www.adafruit.com/product/3368", undefined],
     "DRV8833-3297": ["Adafruit", "DRV8833 breakout", "https://www.adafruit.com/product/3297", undefined],
     OLED326: ["Adafruit", "128 × 64 monochrome OLED breakout", "https://www.adafruit.com/product/326", undefined],
+    FS902818: ["FEETECH", "FS90", "https://www.pololu.com/product/2818", "feetech-fs90"],
+    servoSupply276: ["Adafruit", "5 V 2 A switching power supply", "https://www.adafruit.com/product/276", "servo-supply-5v"],
+    servoPowerAdapter368: ["Adafruit", "2.1 mm female barrel-to-screw adapter", "https://www.adafruit.com/product/368", "servo-power-adapter"],
+    servoButton1119: ["Adafruit", "12 mm square, 6 mm tall tactile button", "https://www.adafruit.com/product/1119", "servo-button-pack"],
+    servoCable5515: ["Adafruit", "Shrouded servo-to-three-male-jumper adapter", "https://www.adafruit.com/product/5515", "servo-cable-adapter"],
   } as const;
 
-  it("uses only the seven verified direct official product pages", () => {
+  it("uses only the verified direct official product pages", () => {
     expect(Object.keys(supplierLinks)).toEqual(Object.keys(expected));
     for (const [id, supplier] of Object.entries(supplierLinks)) {
       const url = new URL(supplier.url);
       expect(url.protocol).toBe("https:");
-      expect(["www.raspberrypi.com", "www.adafruit.com"]).toContain(url.hostname);
+      expect(["www.raspberrypi.com", "www.adafruit.com", "www.pololu.com"]).toContain(url.hostname);
       expect(url.username).toBe("");
       expect(url.password).toBe("");
       expect(url.search).toBe("");

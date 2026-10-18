@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { addLearningLinks, getLearningFiles } from "../src/lib/learning";
 
-const templateIds = ["linkage", "desk-robot", "cyberdeck", "sensor", "blank"] as const;
+const templateIds = ["linkage", "desk-robot", "cyberdeck", "sensor", "blank", "servo-bench"] as const;
 const learningFilenames = ["START_HERE.md", "GLOSSARY.md", "LEARNING_PATH.md"];
 
 function markdownAnchors(markdown: string): Set<string> {

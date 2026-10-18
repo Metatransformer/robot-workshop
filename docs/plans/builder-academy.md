@@ -208,3 +208,44 @@ worksheet. An explicit unresolved measurement is preferable to a fictitious buil
 qualification. Keep the next slice narrow; do not add more curriculum breadth to
 avoid this engineering gate. Sensor notebook report restoration remains a later
 usability improvement; current reports are portable artifacts, not restorable state.
+
+## Cycle 5 — explicit FS90 bench route (2026-10-18)
+
+Selection evidence in docs/research/servo-selection.md resolves the logic-level
+gate for a different exact servo: Pololu FS90 explicitly accepts3.3V control.
+Current sources conflict, retained visibly rather than averaged into a rating.
+Dedicated servo-bench starter preserves existing SG92R concept and user projects.
+Hold-to-run original CircuitPython firmware: startup disarmed, stable release
+before start,1450–1550us commands,5sec timeout, pulse cessation on release. No claim
+of hardware interlock or physical position feedback. Separate external5V supply
+and common ground, zero external-positive connection to Pico power pins.
+Sol96181 owns three new guide/firmware/test files in servo-bench.md. Root owns
+append-only seed/catalog/learning entries, route/navigation, browser acceptance and
+source review. Existing actions and paths remain, no hidden variant replacement.
+Integration package servo-bench-integration.md runs as Sol98082 with a disjoint
+closed allowlist (seed/catalog/learning/supplier append-only additions, one route,
+Overview link, focused tests). Logs /private/tmp/mt-servo-bench.log and
+/private/tmp/mt-servo-integration.log; result files alongside. Root browser test
+owns tests/e2e/servo-bench.spec.ts. No worker may stage or commit.
+
+
+Cycle 5 complete: Sol96181, Sol98082 and Sol29902 finished. The exact FS90 bench,
+printable guide, firmware, learning path and catalog handoff are integrated. Root
+added template deep-link support, corrected documented connector/button details,
+fixed immediate catalog refresh and audited preservation of original behavior.
+Independent critic accepted final source and rendered PDF.146 tests across22 files,
+typecheck, production build and the servo browser journey passed. Software-tested,
+physically unbuilt; current-source discrepancies remain explicit.
+
+Next concrete work package: sensor observation report restoration. Inspect the
+existing JSON export schema and notebook source/notes lifecycle first. Add strict
+versioned import validation and a review-before-replace action; restore recorded
+provenance, selected segment and notes from a compatible report. Preserve current
+work on cancel or malformed input, invalidate pending file reads, and ensure
+restored data remains unverified user-supplied or explicitly synthetic as recorded.
+Use a closed allowlist limited to the sensor observation parser/schema, notebook
+component and corresponding unit/browser tests after inspecting their exact paths.
+Acceptance: export annotated segment, reload, restore, re-export without losing
+notes/provenance; malformed/unsupported reports cannot mutate the active notebook.
+No new curriculum, serial capture, hosted services or hardware execution. Obtain
+independent product critique and record the actual browser evidence before commit.

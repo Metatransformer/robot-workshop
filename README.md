@@ -58,6 +58,15 @@ at `/build-guides/sensor`: exact supplier candidates, cable/header choices, pack
 versus used quantities, breadboard checks, and source-bundle handoff. New sensor
 projects include the same `BUY_AND_BUILD.md`; existing project files stay intact.
 
+The separate `servo-bench` starter has a printable guide at `/build-guides/servo`,
+exact FS90 supplier references, power and wiring plans, and original CircuitPython
+hold-to-run firmware. Its learning path connects power, torque, PWM and state
+machines. The controller starts disarmed and stops pulses on release or timeout;
+software tests do not establish physical motion, electrical behavior or torque
+release. This unloaded bench route has not been physically built or validated.
+Creating a starter adds missing BOM definitions to the local catalog while
+preserving existing inventory records and project files.
+
 At `/bench/sensor`, paste or import the starter firmware’s serial CSV, inspect
 separate recording segments and scatter plots, and export readings plus bench
 observations. Diagnostics and source line numbers remain in the JSON report.

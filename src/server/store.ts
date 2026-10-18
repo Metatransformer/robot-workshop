@@ -426,6 +426,16 @@ export async function createProject(input: { title: string; description?: string
   return withMutation(async () => {
     const destination = path.join(workshopHome(), "projects", randomUUID());
     let project = await scaffoldProject(destination, { title: input.title, templateId: input.templateId });
+    const catalog = await readCatalog();
+    const catalogIds = new Set(catalog.map((item) => item.id));
+    let catalogChanged = false;
+    for (const entry of project.bom) {
+      if (catalogIds.has(entry.itemId)) continue;
+      catalog.push(structuredClone(entry.snapshot));
+      catalogIds.add(entry.itemId);
+      catalogChanged = true;
+    }
+    if (catalogChanged) await writeJson(catalogPath(), catalog);
     if (input.description !== undefined) {
       project = ProjectSchema.parse({ ...project, description: input.description, updatedAt: new Date().toISOString() });
       await writeProjectManifest(destination, project);

@@ -1,8 +1,10 @@
 import { addLearningLinks, getLearningFiles } from "./learning";
 import type { CatalogItem, ModelKind, Template } from "./contracts";
 import { sensorBuildGuideMarkdown } from "./sensor-build-guide";
+import { servoBenchFiles } from "./servo-bench";
 
 const SEEDED_AT = "2026-10-17T00:00:00.000Z";
+const SERVO_SEEDED_AT = "2026-10-18T00:00:00.000Z";
 
 type TemplateSeed = Template & {
   parameters: Record<string, number>;
@@ -14,6 +16,13 @@ const source = (id: string, title: string, url: string) => ({
   title,
   url,
   capturedAt: SEEDED_AT,
+});
+
+const servoSource = (id: string, title: string, url: string) => ({
+  id,
+  title,
+  url,
+  capturedAt: SERVO_SEEDED_AT,
 });
 
 const catalogItem = (
@@ -162,6 +171,114 @@ export const seedCatalog: CatalogItem[] = [
     specs: [],
     sources: [],
   }),
+  {
+    ...catalogItem({
+      id: "feetech-fs90",
+      name: "FEETECH FS90 positional micro servo",
+      kind: "part",
+      category: "actuator",
+      description: "Exact FS90 positional servo selected for the unloaded bench route. Pololu documents 3.3 V and 5 V control compatibility, but available current figures conflict across references and are not guaranteed for every revision; inspect the received marking and begin unloaded; this route has not been physically validated.",
+      manufacturer: "FEETECH",
+      model: "FS90",
+      tags: ["servo", "actuator", "positional"],
+      specs: [],
+      sources: [servoSource("src-feetech-fs90", "Pololu FEETECH FS90 micro servo product page", "https://www.pololu.com/product/2818")],
+    }),
+    createdAt: SERVO_SEEDED_AT,
+    updatedAt: SERVO_SEEDED_AT,
+  },
+  {
+    ...catalogItem({
+      id: "servo-supply-5v",
+      name: "Regulated 5 V desktop power supply",
+      kind: "part",
+      category: "power supply",
+      description: "Enclosed regulated 5 V supply candidate for the servo power path. The supplier describes up to 2 A, but this does not establish the servo's unknown startup or stall current limits, transient response, regional suitability, or completed-assembly safety; verify output and polarity before connection.",
+      manufacturer: "Adafruit",
+      model: "5 V 2 A switching power supply",
+      tags: ["power-supply", "servo", "5v"],
+      specs: [],
+      sources: [servoSource("src-servo-supply-5v", "Adafruit 5 V 2 A switching power supply", "https://www.adafruit.com/product/276")],
+    }),
+    createdAt: SERVO_SEEDED_AT,
+    updatedAt: SERVO_SEEDED_AT,
+  },
+  {
+    ...catalogItem({
+      id: "servo-power-adapter",
+      name: "2.1 mm female barrel-to-screw adapter",
+      kind: "part",
+      category: "power connector",
+      description: "Female 2.1 mm barrel adapter with screw terminals for the external servo supply. This is an assembly component, not a finished power harness: verify positive-tip polarity and clamp properly prepared conductors before power.",
+      manufacturer: "Adafruit",
+      model: "2.1 mm female DC power adapter",
+      tags: ["power", "adapter", "screw-terminal"],
+      specs: [],
+      sources: [servoSource("src-servo-power-adapter", "Adafruit female DC power adapter", "https://www.adafruit.com/product/368")],
+    }),
+    createdAt: SERVO_SEEDED_AT,
+    updatedAt: SERVO_SEEDED_AT,
+  },
+  {
+    ...catalogItem({
+      id: "servo-button-pack",
+      name: "Momentary push-button pack",
+      kind: "part",
+      category: "switch",
+      description: "Pack of ten momentary push buttons; the bench uses one. Identify the paired legs with unpowered continuity before assembly rather than assuming the internal connection from orientation.",
+      manufacturer: "Adafruit",
+      model: "12 mm square, 6 mm tall tactile button 10-pack",
+      tags: ["button", "momentary", "input"],
+      specs: [],
+      sources: [servoSource("src-servo-button-pack", "Adafruit 12 mm square, 6 mm tall tactile button 10-pack", "https://www.adafruit.com/product/1119")],
+    }),
+    createdAt: SERVO_SEEDED_AT,
+    updatedAt: SERVO_SEEDED_AT,
+  },
+  {
+    ...catalogItem({
+      id: "servo-cable-adapter",
+      name: "Shrouded servo-to-male jumper adapter",
+      kind: "part",
+      category: "cable",
+      description: "Shrouded servo adapter with three male jumper ends. It is not a plug-and-play power assembly: keep the signal end for the logic connection and prepare the power and ground leads for the screw clamps exactly as the build guide directs, without cutting the servo's original lead.",
+      manufacturer: "Adafruit",
+      model: "Servo to male jumper adapter",
+      tags: ["servo", "adapter", "cable"],
+      specs: [],
+      sources: [servoSource("src-servo-cable-adapter", "Adafruit servo extension to male jumper adapter", "https://www.adafruit.com/product/5515")],
+    }),
+    createdAt: SERVO_SEEDED_AT,
+    updatedAt: SERVO_SEEDED_AT,
+  },
+  {
+    ...catalogItem({
+      id: "servo-hookup-wire",
+      name: "Servo bench hookup wire",
+      kind: "part",
+      category: "wire",
+      description: "Generic hookup conductors for one short, appropriately terminated common-ground lead plus logic jumpers whose ends match the breadboard and screw clamps. Select gauge, insulation, termination, retention, and length for the actual assembly; loose Dupont pins do not belong in the power clamps.",
+      tags: ["wire", "ground", "jumper"],
+      specs: [],
+      sources: [],
+    }),
+    createdAt: SERVO_SEEDED_AT,
+    updatedAt: SERVO_SEEDED_AT,
+  },
+  {
+    ...catalogItem({
+      id: "tool-wire-stripper",
+      name: "Wire stripper and cutter",
+      kind: "tool",
+      category: "hand tool",
+      description: "Generic hand tool suitable for cutting and stripping the selected hookup conductors and adapter leads without nicking the conductor. The cable preparation is an assembly step and must follow the build guide with all power disconnected.",
+      tags: ["wire-preparation", "assembly", "hand-tool"],
+      specs: [],
+      sources: [],
+    }),
+    createdAt: SERVO_SEEDED_AT,
+    updatedAt: SERVO_SEEDED_AT,
+  },
 ];
 
 const commonAgentInstructions = `# Workshop project instructions
@@ -702,6 +819,31 @@ All technical, safety, compatibility, cost, schedule, and fabrication risks are 
 Record date, decision, alternatives considered, evidence, owner, and what would cause the decision to be revisited.
 `,
     },
+  },
+  {
+    id: "servo-bench",
+    title: "Pico + FS90 servo bench",
+    description: "Practice hold-to-run control of an unloaded FEETECH FS90 servo on an unbuilt bench route, with disarmed startup and explicit power, release, timeout, and measurement checks.",
+    category: "robotics",
+    level: "beginner",
+    model: "none",
+    skills: ["power", "pulse control", "measurement"],
+    partIds: [
+      "raspberry-pi-pico",
+      "feetech-fs90",
+      "generic-breadboard",
+      "servo-supply-5v",
+      "servo-power-adapter",
+      "servo-button-pack",
+      "servo-cable-adapter",
+      "servo-hookup-wire",
+      "generic-usb-data-cable",
+      "tool-digital-multimeter",
+      "tool-screwdriver",
+      "tool-wire-stripper",
+    ],
+    parameters: {},
+    files: servoBenchFiles,
   },
 ];
 

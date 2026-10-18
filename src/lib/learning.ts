@@ -1,4 +1,4 @@
-type LearningTemplate = "linkage" | "desk-robot" | "cyberdeck" | "sensor" | "blank";
+type LearningTemplate = "linkage" | "desk-robot" | "cyberdeck" | "sensor" | "blank" | "servo-bench";
 
 type GlossaryTerm = {
   label: string;
@@ -12,6 +12,7 @@ const templateNames: Record<LearningTemplate, string> = {
   cyberdeck: "Personal computer build",
   sensor: "Pico + BME280 temperature indicator",
   blank: "Your own engineering project",
+  "servo-bench": "Pico + FS90 servo bench",
 };
 
 const glossaryTerms: GlossaryTerm[] = [
@@ -273,6 +274,24 @@ Finish this sentence in one line: “A person can ___, in ___ setting, and I wil
 
 Read [README.md](README.md), consult [GLOSSARY.md](GLOSSARY.md) when needed, and then open [ENGINEERING.md](ENGINEERING.md) to record requirements, interfaces, a smallest useful test, expected observations, and stop conditions.
 `,
+  "servo-bench": `# Start here — Pico + FS90 servo bench
+
+This route pairs the original Raspberry Pi Pico with the exact FEETECH FS90 positional servo, an external regulated 5 V supply, and a momentary button. It is a researched but unbuilt bench exercise: the servo begins disarmed, produces pulses only while the button is held, disarms on release, and also stops pulses after the firmware timeout. Removing pulses is a software behavior, not proof that the servo has released torque or that power is safe.
+
+## What you will build and learn
+
+You will plan and inspect a hold-to-run, unloaded servo bench before applying power. You will learn to keep servo power separate from the Pico signal, share the documented ground, distinguish the FS90 from the continuous-rotation FS90R, and measure actual supply behavior without inventing current limits or motion results.
+
+## Prerequisites and what you need
+
+No servo experience is required, but you must plan the complete wiring and stop conditions before power. Gather the exact parts named in [BUY_AND_BUILD.md](BUY_AND_BUILD.md), leave the horn and every linkage off for the first test, and keep the barrel disconnect available as the physical stop. Do not choose endpoints from wire color alone.
+
+## Your first small step
+
+With USB and the external supply disconnected, identify the **FS90** label, the Pico's intended signal and ground pins, the supply adapter's positive and ground terminals, and the button's internally paired legs using unpowered continuity where needed. Success is visible when you can point to every named part and pin, explain the common-ground path, and distinguish the FS90 from an FS90R without connecting a wire.
+
+Next read [README.md](README.md), then follow the exact procurement and assembly route in [BUY_AND_BUILD.md](BUY_AND_BUILD.md). Keep [GLOSSARY.md](GLOSSARY.md) open for unfamiliar terms, and read [ENGINEERING.md](ENGINEERING.md) before wiring or powering anything; it owns the interfaces, staged checks, measurements, and stop conditions.
+`,
 };
 
 const nextSteps: Record<LearningTemplate, string> = {
@@ -295,6 +314,10 @@ const nextSteps: Record<LearningTemplate, string> = {
 - **Combine electronics and motion.** Goal: build one carefully bounded servo behavior. Prerequisite: sensor/controller and linkage basics, or equivalent experience. Open the [desk-robot tutorial](workshop:template/desk-robot).
 - **Practice system integration.** Goal: coordinate power, connectors, software, cooling, and enclosure decisions. Prerequisite: confidence checking exact parts and primary documents. Open the [cyberdeck tutorial](workshop:template/cyberdeck).
 - **Shape your own project.** Goal: define an observable outcome and the smallest test that reduces its biggest unknown. Prerequisite: an idea and its intended setting. Stay with the [blank project](workshop:template/blank).`,
+  "servo-bench": `- **Build the hold-to-run bench in stages.** Goal: verify disarmed startup, button-held pulses, release disarm, timeout behavior, and recorded supply measurements with the exact unloaded FS90 route. Prerequisite: identify every part, pin, power boundary, and stop condition. Stay with [this servo-bench tutorial](workshop:template/servo-bench).
+- **Practice a lower-risk controller interface.** Goal: wire a Pico sensor, load code, and recognize healthy serial output without a motor load. Prerequisite: none. Open the [sensor tutorial](workshop:template/sensor).
+- **Learn a mechanism without motor power.** Goal: make and inspect a hand-driven card linkage before asking a servo to move a load. Prerequisite: none. Open the [linkage tutorial](workshop:template/linkage).
+- **Plan a mechanism integration.** Goal: apply the measured bench evidence to an expressive mechanism design with explicit load and clearance checks. Prerequisite: a validated unloaded servo bench and a freely moving mechanism. Open the [desk-robot concept tutorial](workshop:template/desk-robot); it is not an existing build-ready FS90 design.`,
 };
 
 function learningPath(templateId: LearningTemplate): string {

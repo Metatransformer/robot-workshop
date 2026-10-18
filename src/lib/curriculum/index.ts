@@ -44,6 +44,11 @@ const projectPathTargets: { templateId: TemplateId; title: string; description: 
     required: ["units-estimation", "measurement-instruments", "experimental-method", "engineering-workflow", "robot-architecture", "documentation-sharing"],
     optional: ["forces-free-body", "voltage-current-resistance", "programming-state", "system-integration"],
   },
+  {
+    templateId: "servo-bench", title: "Command a servo deliberately", description: "Plan and verify disarmed startup, release and timeout behavior, and supply measurements on the unloaded FS90 bench.",
+    required: ["voltage-current-resistance", "power-regulation", "torque-gearing", "mcu-gpio", "timers-pwm", "programming-state", "reliability-faults"],
+    optional: ["measurement-instruments", "experimental-method"],
+  },
 ];
 
 const modulesById = new Map(modules.map(module => [module.id, module]));

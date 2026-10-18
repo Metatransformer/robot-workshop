@@ -28,7 +28,7 @@ type ExportResult = { filename: string; content: string };
 type FileDraft = { content: string; baseContent: string; baseHash: string };
 type FileRequest = { projectId: string; path: string; mode?: "read" | "edit"; fragment?: string };
 
-const TEMPLATE_LINKS = new Set(["sensor", "linkage", "desk-robot", "cyberdeck", "blank"]);
+const TEMPLATE_LINKS = new Set(["sensor", "linkage", "desk-robot", "cyberdeck", "blank", "servo-bench"]);
 const LEARNING_FILES = [
   { basename: "START_HERE.md", label: "Start here" },
   { basename: "GLOSSARY.md", label: "Glossary" },
@@ -80,7 +80,7 @@ function resolveProjectLink(url: string, currentPath = ""): { path: string; frag
 }
 
 function markdownUrlTransform(value: string) {
-  if (/^workshop:template\/(sensor|linkage|desk-robot|cyberdeck|blank)$/.test(value)) return value;
+  if (/^workshop:template\/(sensor|linkage|desk-robot|cyberdeck|blank|servo-bench)$/.test(value)) return value;
   return defaultUrlTransform(value);
 }
 
@@ -228,6 +228,18 @@ export default function Studio({ token, initialTemplateId }: StudioProps) {
     finally { setLoading(false); }
   }, [loadProject, token]);
 
+  const handleProjectCreated = async (created: ProjectDetail) => {
+    setNewProjectOpen(false);
+    setNewProjectTemplateId("");
+    selectReturnedProject(created, { openWorkshop: true, tab: created.model === "none" ? "overview" : "model" });
+    try {
+      const data = await workshopRequest<Bootstrap>(token, { query: { action: "bootstrap" } });
+      setBootstrap((current) => current ? { ...current, library: data.library } : current);
+    } catch {
+      setError("Project created. Reload to refresh its parts in the catalog.");
+    }
+  };
+
   useEffect(() => { void loadBootstrap(); }, [loadBootstrap]);
   useEffect(() => () => { if (parameterTimer.current) clearTimeout(parameterTimer.current); }, []);
   useEffect(() => {
@@ -328,7 +340,7 @@ export default function Studio({ token, initialTemplateId }: StudioProps) {
     </div>
 
     {agentDockOpen && <AgentDock token={token} project={project} onClose={closeAgentDock} onResult={(result) => selectReturnedProject(result, { openWorkshop: true, tab: result.model === "none" ? "overview" : "model" })} onError={setError} />}
-    {newProjectOpen && <NewProjectDialog key={newProjectTemplateId || "blank-project"} templates={bootstrap.templates} initialTemplateId={newProjectTemplateId} token={token} onClose={() => { setNewProjectOpen(false); setNewProjectTemplateId(""); }} onCreated={(created) => { setNewProjectOpen(false); setNewProjectTemplateId(""); selectReturnedProject(created, { openWorkshop: true, tab: created.model === "none" ? "overview" : "model" }); }} />}
+    {newProjectOpen && <NewProjectDialog key={newProjectTemplateId || "blank-project"} templates={bootstrap.templates} initialTemplateId={newProjectTemplateId} token={token} onClose={() => { setNewProjectOpen(false); setNewProjectTemplateId(""); }} onCreated={(created) => void handleProjectCreated(created)} />}
     {exportOpen && project && <ExportDialog project={project} pending={pending === "export"} onClose={() => setExportOpen(false)} onExport={(paths) => void exportProject(paths)}/>}
   </main>;
 }
@@ -405,7 +417,7 @@ function MarkdownDocument({ content, project, currentPath = "", onOpenFile, onOp
     a: ({ href = "", children }) => {
       if (!href) return <span>{children}</span>;
       if (href.startsWith("#")) return <a href={href}>{children}</a>;
-      const templateMatch = /^workshop:template\/(sensor|linkage|desk-robot|cyberdeck|blank)$/.exec(href);
+      const templateMatch = /^workshop:template\/(sensor|linkage|desk-robot|cyberdeck|blank|servo-bench)$/.exec(href);
       if (templateMatch) return <button className="markdown-file-link markdown-template-link" type="button" onClick={() => onOpenTemplate(templateMatch[1])}>{children}</button>;
       if (isExternalUrl(href)) return <a href={href} target="_blank" rel="noopener noreferrer">{children}<span className="sr-only"> (opens in a new tab)</span></a>;
       if (/^(?:ircs?|mailto|xmpp):/i.test(href)) return <a href={href}>{children}</a>;
@@ -424,7 +436,7 @@ function ProjectDocumentLinks({ learningFiles, engineeringPath, onOpenFile, comp
 
 function Overview({ project, engineeringPath, learningFiles, onOpenFile, onOpenTemplate }: { project: ProjectDetail; engineeringPath?: string; learningFiles: { path: string; label: string }[]; onOpenFile: (path: string, mode?: "read" | "edit", fragment?: string) => void; onOpenTemplate: (templateId: string) => void }) {
   const guidePath = findProjectFile(project, "README.md")?.path ?? "";
-  return <div className="overview-grid"><article className="markdown-card"><div className="document-kicker"><FileText size={16}/> Build guide</div>{learningFiles.length > 0 && <ProjectDocumentLinks learningFiles={learningFiles} onOpenFile={onOpenFile} compact/>}<MarkdownDocument content={project.guide || "No guide has been written for this project yet."} project={project} currentPath={guidePath} onOpenFile={onOpenFile} onOpenTemplate={onOpenTemplate}/></article><aside className="outcome-card"><span className="eyebrow">Metatransformer outcome</span><a className="button button--quiet" href={`/learn?project=${encodeURIComponent(project.templateId)}`}>Learn this build</a>{project.templateId === "sensor" && <a className="button button--quiet" href="/build-guides/sensor">Buy & assemble this sensor</a>}{project.templateId === "sensor" && <a className="button button--quiet" href="/bench/sensor">Inspect sensor readings</a>}<h3>{project.model === "linkage" ? "A motion study you can tune, inspect, and carry into a physical prototype." : project.model === "none" ? "A documented build with ordinary files you can keep editing anywhere." : "A concept assembly ready for design decisions and source work."}</h3>{engineeringPath && <button className="button button--plan" type="button" onClick={() => onOpenFile(engineeringPath, "read")}><FileText size={16}/> Engineering plan</button>}<dl><div><dt>Files</dt><dd>{project.files.length}</dd></div><div><dt>Catalog entries</dt><dd>{project.bom.length}</dd></div><div><dt>Updated</dt><dd>{new Date(project.updatedAt).toLocaleDateString()}</dd></div></dl><p className="fine-print">Previews explain intent; they do not certify component dimensions or physical compatibility.</p></aside></div>;
+  return <div className="overview-grid"><article className="markdown-card"><div className="document-kicker"><FileText size={16}/> Build guide</div>{learningFiles.length > 0 && <ProjectDocumentLinks learningFiles={learningFiles} onOpenFile={onOpenFile} compact/>}<MarkdownDocument content={project.guide || "No guide has been written for this project yet."} project={project} currentPath={guidePath} onOpenFile={onOpenFile} onOpenTemplate={onOpenTemplate}/></article><aside className="outcome-card"><span className="eyebrow">Metatransformer outcome</span><a className="button button--quiet" href={`/learn?project=${encodeURIComponent(project.templateId)}`}>Learn this build</a>{project.templateId === "sensor" && <a className="button button--quiet" href="/build-guides/sensor">Buy & assemble this sensor</a>}{project.templateId === "sensor" && <a className="button button--quiet" href="/bench/sensor">Inspect sensor readings</a>}{project.templateId === "servo-bench" && <a className="button button--quiet" href="/build-guides/servo">Build the FS90 bench</a>}<h3>{project.model === "linkage" ? "A motion study you can tune, inspect, and carry into a physical prototype." : project.model === "none" ? "A documented build with ordinary files you can keep editing anywhere." : "A concept assembly ready for design decisions and source work."}</h3>{engineeringPath && <button className="button button--plan" type="button" onClick={() => onOpenFile(engineeringPath, "read")}><FileText size={16}/> Engineering plan</button>}<dl><div><dt>Files</dt><dd>{project.files.length}</dd></div><div><dt>Catalog entries</dt><dd>{project.bom.length}</dd></div><div><dt>Updated</dt><dd>{new Date(project.updatedAt).toLocaleDateString()}</dd></div></dl><p className="fine-print">Previews explain intent; they do not certify component dimensions or physical compatibility.</p></aside></div>;
 }
 
 function ProjectParts({ project, library, onOpenCatalog }: { project: ProjectDetail; library: CatalogItem[]; onOpenCatalog: () => void }) {

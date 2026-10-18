@@ -5,6 +5,7 @@ import os from "node:os";
 import path from "node:path";
 import { promisify } from "node:util";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { templates } from "../src/lib/seeds";
 import type { CatalogItem } from "../src/lib/contracts";
 import { scaffoldProject } from "../src/lib/project-format";
 import {
@@ -56,7 +57,7 @@ function manualItem(id: string): CatalogItem {
 describe("durable workshop store", () => {
   it("serializes first-use initialization and creates complete examples", async () => {
     const results = await Promise.all([getBootstrap(), getBootstrap(), getBootstrap()]);
-    expect(results[0].projects).toHaveLength(5);
+    expect(results[0].projects).toHaveLength(templates.length);
     expect(results[0].library.some((item) => item.id === "raspberry-pi-pico")).toBe(true);
     for (const project of results[0].projects) {
       expect(await readFile(path.join(project.directory, "ENGINEERING.md"), "utf8")).toMatch(/untested|not been/i);
@@ -70,7 +71,7 @@ describe("durable workshop store", () => {
     await writeFile(path.join(lock, "owner.json"), `${JSON.stringify({ pid: 2_147_483_647, token: "dead-owner" })}\n`);
 
     const bootstrap = await getBootstrap();
-    expect(bootstrap.projects).toHaveLength(5);
+    expect(bootstrap.projects).toHaveLength(templates.length);
     await expect(readFile(path.join(lock, "owner.json"), "utf8")).rejects.toMatchObject({ code: "ENOENT" });
   });
 
@@ -290,5 +291,43 @@ describe("durable workshop store", () => {
     await writeFile(path.join(result.directory, "EXPORT.json"), `${JSON.stringify({ files: ["PRIVATE-NOTES.md"] }, null, 2)}\n`);
     const allowlisted = JSON.parse((await exportProject(result.id)).content) as { files: { path: string }[] };
     expect(allowlisted.files.map((file) => file.path)).toEqual(["PRIVATE-NOTES.md"]);
+  });
+
+  it("adds missing template BOM snapshots to the catalog without changing existing inventory or projects", async () => {
+    const bootstrap = await getBootstrap();
+    const existingSensorProject = bootstrap.projects.find((project) => project.templateId === "sensor");
+    expect(existingSensorProject).toBeDefined();
+    const existingManifestPath = path.join(existingSensorProject!.directory, "project.json");
+    const existingManifest = await readFile(existingManifestPath, "utf8");
+    const catalogPath = path.join(process.env.METATRANSFORMER_HOME!, "catalog.json");
+    const catalog = JSON.parse(await readFile(catalogPath, "utf8")) as CatalogItem[];
+    const customizedPico = {
+      ...catalog.find((item) => item.id === "raspberry-pi-pico")!,
+      ownedQuantity: 4,
+      notes: "Two installed and two in the blue drawer",
+      version: 12,
+    };
+    const catalogMissingBme280 = catalog
+      .filter((item) => item.id !== "adafruit-bme280")
+      .map((item) => item.id === customizedPico.id ? customizedPico : item);
+    await writeFile(catalogPath, `${JSON.stringify(catalogMissingBme280, null, 2)}\n`);
+
+    const first = await createProject({ title: "Catalog repair one", templateId: "sensor" });
+    const firstManifestPath = path.join(first.directory, "project.json");
+    const firstManifest = await readFile(firstManifestPath, "utf8");
+    let library = (await getBootstrap()).library;
+    const bme280Snapshot = first.bom.find((entry) => entry.itemId === "adafruit-bme280")!.snapshot;
+    expect(library.filter((item) => item.id === "adafruit-bme280")).toEqual([bme280Snapshot]);
+    expect(library.filter((item) => item.id !== "adafruit-bme280")).toEqual(catalogMissingBme280);
+    expect(library.find((item) => item.id === customizedPico.id)).toEqual(customizedPico);
+    expect(await readFile(existingManifestPath, "utf8")).toBe(existingManifest);
+
+    await createProject({ title: "Catalog repair two", templateId: "sensor" });
+    library = (await getBootstrap()).library;
+    expect(library.filter((item) => item.id === "adafruit-bme280")).toEqual([bme280Snapshot]);
+    expect(library.filter((item) => item.id !== "adafruit-bme280")).toEqual(catalogMissingBme280);
+    expect(library.find((item) => item.id === customizedPico.id)).toEqual(customizedPico);
+    expect(await readFile(existingManifestPath, "utf8")).toBe(existingManifest);
+    expect(await readFile(firstManifestPath, "utf8")).toBe(firstManifest);
   });
 });
