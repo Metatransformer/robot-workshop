@@ -174,4 +174,32 @@ export const supplierLinks: Record<string, SupplierLink> = {
       "Keep the signal male pin for logic; prepare the adapter's power leads for the screw clamp exactly as the guide directs. Do not cut the servo's original lead or treat this as plug-and-play power wiring.",
     ],
   },
+  redLED297: {
+    name: "Red 5 mm LED 25-pack",
+    manufacturer: "Adafruit",
+    model: "Red 5 mm LED",
+    seller: "Adafruit",
+    sku: "297",
+    url: "https://www.adafruit.com/product/297",
+    checkedAt: "2026-10-18",
+    catalogItemId: "red-led-5mm-297",
+    selectionNotes: [
+      "The seller package contains 25 red LEDs; the external indicator template uses one LED, and the remaining pieces are not build quantity.",
+      "Adafruit documents a 1.8–2.2 V forward-voltage range at 20 mA. That range is not a claim about the template's approximately 1 mA operating point; identify polarity and keep the 1 kΩ resistor in series.",
+    ],
+  },
+  resistor1K4294: {
+    name: "1 kΩ axial resistor 25-pack",
+    manufacturer: "Adafruit",
+    model: "1 kΩ axial resistor",
+    seller: "Adafruit",
+    sku: "4294",
+    url: "https://www.adafruit.com/product/4294",
+    checkedAt: "2026-10-18",
+    catalogItemId: "resistor-1k-4294",
+    selectionNotes: [
+      "The seller package contains 25 resistors; the external indicator template uses one resistor, and the remaining pieces are not build quantity.",
+      "Select the documented axial 1 kΩ ±5% 1/4 W part, measure the isolated resistor before assembly, and keep it in series with the LED.",
+    ],
+  },
 };

@@ -78,7 +78,7 @@ describe("curriculum content graph invariants", () => {
     const moduleIds = new Set(modules.map(module => module.id));
     const templateIds = new Set(projectPaths.map(path => path.templateId));
 
-    expect([...templateIds].sort()).toEqual(["blank", "cyberdeck", "desk-robot", "linkage", "sensor", "servo-bench"]);
+    expect([...templateIds].sort()).toEqual(["blank", "cyberdeck", "desk-robot", "linkage", "sensor", "sensor-led", "servo-bench"]);
     expect(templateIds.size).toBe(projectPaths.length);
     for (const path of projectPaths) {
       expect(path.required.length, `${path.templateId} required path`).toBeGreaterThanOrEqual(1);

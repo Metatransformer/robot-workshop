@@ -1,6 +1,7 @@
 import { addLearningLinks, getLearningFiles } from "./learning";
 import type { CatalogItem, ModelKind, Template } from "./contracts";
 import { sensorBuildGuideMarkdown } from "./sensor-build-guide";
+import { sensorLedFiles } from "./sensor-led";
 import { servoBenchFiles } from "./servo-bench";
 
 const SEEDED_AT = "2026-10-17T00:00:00.000Z";
@@ -19,6 +20,13 @@ const source = (id: string, title: string, url: string) => ({
 });
 
 const servoSource = (id: string, title: string, url: string) => ({
+  id,
+  title,
+  url,
+  capturedAt: SERVO_SEEDED_AT,
+});
+
+const sensorLedSource = (id: string, title: string, url: string) => ({
   id,
   title,
   url,
@@ -275,6 +283,58 @@ export const seedCatalog: CatalogItem[] = [
       tags: ["wire-preparation", "assembly", "hand-tool"],
       specs: [],
       sources: [],
+    }),
+    createdAt: SERVO_SEEDED_AT,
+    updatedAt: SERVO_SEEDED_AT,
+  },
+  {
+    ...catalogItem({
+      id: "red-led-5mm-297",
+      name: "Adafruit red 5 mm LED",
+      kind: "part",
+      category: "indicator",
+      description: "One red 5 mm through-hole LED for the external indicator circuit. Adafruit sells this item in a pack of 25, but this catalog entry and the template BOM each represent one LED. The documented 1.8–2.2 V forward-voltage range is specified at 20 mA, not at the build's approximately 1 mA operating point.",
+      manufacturer: "Adafruit",
+      model: "Red 5 mm LED",
+      tags: ["led", "indicator", "through-hole"],
+      specs: [
+        { label: "Forward voltage", value: "1.8–2.2", unit: "V at 20 mA", evidence: "document", sourceId: "src-red-led-5mm-297", quote: "1.8-2.2V Forward Voltage, at 20mA current" },
+      ],
+      sources: [sensorLedSource("src-red-led-5mm-297", "Adafruit red 5 mm LED product page", "https://www.adafruit.com/product/297")],
+    }),
+    createdAt: SERVO_SEEDED_AT,
+    updatedAt: SERVO_SEEDED_AT,
+  },
+  {
+    ...catalogItem({
+      id: "resistor-1k-4294",
+      name: "Adafruit 1 kΩ axial resistor",
+      kind: "part",
+      category: "resistor",
+      description: "One axial 1 kΩ resistor for the external LED current-limiting path. Adafruit sells this item in a pack of 25, but this catalog entry and the template BOM each represent one resistor.",
+      manufacturer: "Adafruit",
+      model: "1 kΩ axial resistor",
+      tags: ["resistor", "current-limiting", "through-hole"],
+      specs: [
+        { label: "Resistance", value: "1", unit: "kΩ", evidence: "document", sourceId: "src-resistor-1k-4294", quote: "25 Pack of 1.0KΩ Resistors" },
+        { label: "Tolerance", value: "±5", unit: "%", evidence: "document", sourceId: "src-resistor-1k-4294", quote: "5% precision resistors" },
+        { label: "Power rating", value: "1/4", unit: "W", evidence: "document", sourceId: "src-resistor-1k-4294", quote: "1/4 Watt max dissipation" },
+      ],
+      sources: [sensorLedSource("src-resistor-1k-4294", "Adafruit 1 kΩ resistor product page", "https://www.adafruit.com/product/4294")],
+    }),
+    createdAt: SERVO_SEEDED_AT,
+    updatedAt: SERVO_SEEDED_AT,
+  },
+  {
+    ...catalogItem({
+      id: "sensor-led-jumper-set",
+      name: "Male/male jumper set (six wires)",
+      kind: "part",
+      category: "prototyping",
+      description: "Six male/male conductors: four sensor connections and two LED circuit connections. One catalog unit is this six-wire set, taken from a larger supplier ribbon.",
+      tags: ["jumper-wire", "prototype"],
+      specs: [],
+      sources: [sensorLedSource("src-led-jumpers", "Adafruit male/male jumper ribbon", "https://www.adafruit.com/product/758")],
     }),
     createdAt: SERVO_SEEDED_AT,
     updatedAt: SERVO_SEEDED_AT,
@@ -844,6 +904,28 @@ Record date, decision, alternatives considered, evidence, owner, and what would 
     ],
     parameters: {},
     files: servoBenchFiles,
+  },
+  {
+    id: "sensor-led",
+    title: "Pico + BME280 external LED indicator",
+    description: "Read environmental measurements from a BME280 and make the temperature threshold visible with a resistor-limited external red LED on an original Raspberry Pi Pico.",
+    category: "electronics",
+    level: "beginner",
+    model: "none",
+    skills: ["CircuitPython", "I2C wiring", "GPIO output", "measurement"],
+    partIds: [
+      "raspberry-pi-pico",
+      "adafruit-bme280",
+      "generic-breadboard",
+      "generic-usb-data-cable",
+      "sensor-led-jumper-set",
+      "tool-digital-multimeter",
+      "tool-soldering-iron",
+      "red-led-5mm-297",
+      "resistor-1k-4294",
+    ],
+    parameters: {},
+    files: sensorLedFiles,
   },
 ];
 

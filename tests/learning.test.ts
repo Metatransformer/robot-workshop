@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { addLearningLinks, getLearningFiles } from "../src/lib/learning";
 
-const templateIds = ["linkage", "desk-robot", "cyberdeck", "sensor", "blank", "servo-bench"] as const;
+const templateIds = ["linkage", "desk-robot", "cyberdeck", "sensor", "blank", "servo-bench", "sensor-led"] as const;
 const learningFilenames = ["START_HERE.md", "GLOSSARY.md", "LEARNING_PATH.md"];
 
 function markdownAnchors(markdown: string): Set<string> {
@@ -88,6 +88,16 @@ describe("learning files", () => {
     expect(start).toContain("BME280");
     expect(start).toContain("built-in LED");
     expect(start).toContain("firmware/code.py");
+  });
+
+  it("starts the external LED build with unpowered part identification", () => {
+    const start = getLearningFiles("sensor-led")["START_HERE.md"];
+
+    expect(start).toContain("every power source disconnected");
+    expect(start).toContain("LED's anode and cathode");
+    expect(start).toContain("1 kΩ resistor");
+    expect(start).toContain("[WIRING.md](WIRING.md) is authoritative");
+    expect(start).toContain("[ENGINEERING.md](ENGINEERING.md) is authoritative");
   });
 
   it("rejects unsupported templates", () => {

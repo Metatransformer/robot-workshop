@@ -304,3 +304,42 @@ exact documented LED/resistor and Pico output constraints; connect nominal-curre
 calculation, GPIO wiring and threshold firmware, with a deliberate startup test.
 Distinguish commanded GPIO state from observed illumination. Preserve existing
 sensor template and observation format. No automatic hardware-validation claims.
+
+
+## Round 10 — turn a sensor reading into an external indicator
+
+Added a separate sensor-led starter, source packet, printable guide, real catalog
+parts and learning path. Original sensor/servo/linkage definitions and links remain
+intact. New catalog entries represent one LED, one resistor and one six-wire set;
+supplier package quantities remain distinct. Manufacturer sources and calculation
+assumptions are recorded in docs/research/sensor-led.md. Existing CSV/report format
+is unchanged: led records a command, not an optical observation.
+
+Three closed Sol packages produced firmware/execution tests, the build packet, and
+additive template/catalog/learning integration. Root reviewed all hunks and files;
+workers did not stage, commit, browse or build. Root fixed the four-versus-six-wire
+BOM mismatch, replaced inaccurate source quote text with verified wording, corrected
+clear LED297 identity and the missing adafruit_register dependency, and used the
+actual voltage-current-resistance lesson ID. Independent critic requested explicit
+ambient-relative thresholds and restart-versus-retention wording, now in the guide.
+Imports precede startup pulses, so troubleshooting now asks for the serial traceback.
+
+The first browser journey found missing TEMPLATE_LINKS registration; root repaired
+it instead of bypassing the guide. Final browser checks pass for PDF text, new starter
+creation, source export containing both Python files and GP2 output, catalog handoff,
+learning path, original sensor guide and existing tutorial/glossary navigation.
+The existing broad Pico/BME280 test selector was narrowed to the original starter's
+full title so the added variant cannot make it ambiguous.
+
+Root reproduced182 unit tests across28 files, typecheck, production build and the
+three distinct browser journeys above. Exported Python is executed with mocked
+CircuitPython modules, covering startup order, thresholds, finite fields, address
+faults, read faults, recovery and compatibility with the existing CSV parser.
+Actual desktop/mobile review accepted; a suspected clipped heading was checked in
+a fresh390px viewport (clientHeight=scrollHeight95px, no clamp, all text visible),
+so no speculative CSS change was made. No hardware was wired, flashed or measured.
+
+Next concrete package: a bounded temperature hysteresis explorer tied to indicator.py.
+Show temperature, prior state and next commanded state; compare a single threshold,
+include fault/reset and explain startup/restoration separately. Differential-test
+against the actual exported Python. No thermal, optical or brightness simulation.

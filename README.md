@@ -58,6 +58,13 @@ at `/build-guides/sensor`: exact supplier candidates, cable/header choices, pack
 versus used quantities, breadboard checks, and source-bundle handoff. New sensor
 projects include the same `BUY_AND_BUILD.md`; existing project files stay intact.
 
+The separate `sensor-led` starter adds a red LED and series resistor to the Pico +
+BME280 build. Its printable guide at `/build-guides/sensor-led` includes exact parts,
+six-wire requirements, a current estimate with assumptions, explicit room-temperature
+threshold checks, and separate records of commanded output and observed light.
+The source bundle includes both CircuitPython files. Three startup pulses precede
+sensor initialization; sensor faults command the LED off. This route is unbuilt.
+
 The separate `servo-bench` starter has a printable guide at `/build-guides/servo`,
 exact FS90 supplier references, power and wiring plans, and original CircuitPython
 hold-to-run firmware. Its learning path connects power, torque, PWM and state

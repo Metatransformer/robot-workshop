@@ -1,6 +1,6 @@
 export type TrackId = "foundations" | "electronics" | "mechanics" | "embedded" | "control" | "robotics";
 export type SimulationId = "dc-motor" | "rc-transient" | "power-budget" | "gpio-state-machine";
-export type TemplateId = "linkage" | "sensor" | "desk-robot" | "cyberdeck" | "blank" | "servo-bench";
+export type TemplateId = "linkage" | "sensor" | "desk-robot" | "cyberdeck" | "blank" | "servo-bench" | "sensor-led";
 export type LearningSource = { title: string; url: string };
 export type LearningModule = {
   id: string;

@@ -459,6 +459,7 @@ function LessonReader({ lesson, project, progress, noteDraft, noteError, quizAtt
           <a href={`/learn/print?lesson=${encodeURIComponent(lesson.id)}`} target="_blank" rel="noreferrer"><FileDown aria-hidden="true" /> Print / Save PDF</a>
           {lesson.simulation && <Link href={`/labs?lab=${encodeURIComponent(lesson.simulation)}`}><FlaskConical aria-hidden="true" /> Open related lab</Link>}
           {lesson.id === "timers-pwm" && <Link href="/labs/servo"><FlaskConical aria-hidden="true" /> Explore the FS90 servo command</Link>}
+          {lesson.id === "voltage-current-resistance" && <Link href="/build-guides/sensor-led"><FlaskConical aria-hidden="true" /> Build a sensor LED indicator</Link>}
           {lesson.id === "digital-interfaces" && <Link href="/labs/sensor-wiring"><FlaskConical aria-hidden="true" /> Practice Pico sensor wiring</Link>}
         </div>
         <div className="academy-progress-row" aria-label="Lesson progress">

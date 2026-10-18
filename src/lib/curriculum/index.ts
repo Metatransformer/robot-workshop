@@ -49,6 +49,11 @@ const projectPathTargets: { templateId: TemplateId; title: string; description: 
     required: ["voltage-current-resistance", "power-regulation", "torque-gearing", "mcu-gpio", "timers-pwm", "programming-state", "reliability-faults"],
     optional: ["measurement-instruments", "experimental-method"],
   },
+  {
+    templateId: "sensor-led", title: "Make a reading visible", description: "Wire the Pico/BME280 and a resistor-limited external LED, then distinguish commanded GPIO state from observed light and measured evidence.",
+    required: ["voltage-current-resistance", "measurement-instruments", "mcu-gpio", "programming-state", "digital-interfaces", "communications-protocols", "firmware-debugging"],
+    optional: ["probability-uncertainty", "documentation-sharing"],
+  },
 ];
 
 const modulesById = new Map(modules.map(module => [module.id, module]));

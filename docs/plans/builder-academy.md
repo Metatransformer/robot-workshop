@@ -362,3 +362,27 @@ calculation with assumptions, wiring and threshold firmware with startup test.
 Keep commanded output separate from actual illumination and bench measurements.
 Decompose into closed model/firmware and UI work packages before execution; do not
 expand into a general electronics simulator or a new hardware platform.
+
+## Cycle 10 — make a sensor reading visible (2026-10-18)
+
+Sol50163 owns new firmware and Python execution tests; Sol59484 owns new standalone
+build packet; Sol88830 owns additive catalog/template/learning integration and its
+focused tests. Closed allowlists recorded in three sensor-led work packages. Root
+owns new guide route, additive UI links, E2E, source checks and independent review.
+All existing template entries must remain intact. Independent plan review accepts
+the circuit and requires explicit breadboard junctions and executable threshold tests.
+
+
+Cycle10 complete: independent source/mobile review accepted the standalone LED
+variant. Root corrected guide dependencies/threshold experiments and exact part
+identity, six-wire catalog representation and template-link registration. Verified
+182 tests, typecheck, production build, PDF/source-bundle/catalog journey and existing
+sensor/tutorial browser paths. Existing projects and observation schemas preserved.
+Hardware remains unbuilt/unvalidated; no purchases, flashing or publication.
+
+Next bounded package: temperature hysteresis trace explorer using the exact new
+indicator.py rule. Root defines scenarios crossing28/26, prior/new command table,
+single-threshold comparison, fault/reset and links to the physical threshold checks.
+Sol implements isolated model/UI packages with closed allowlists. Differential
+execution against exported Python is required; keep commands separate from measured
+light and do not infer temperature dynamics or physical brightness.

@@ -52,6 +52,8 @@ describe("verified supplier identities", () => {
     servoPowerAdapter368: ["Adafruit", "2.1 mm female barrel-to-screw adapter", "https://www.adafruit.com/product/368", "servo-power-adapter"],
     servoButton1119: ["Adafruit", "12 mm square, 6 mm tall tactile button", "https://www.adafruit.com/product/1119", "servo-button-pack"],
     servoCable5515: ["Adafruit", "Shrouded servo-to-three-male-jumper adapter", "https://www.adafruit.com/product/5515", "servo-cable-adapter"],
+    redLED297: ["Adafruit", "Red 5 mm LED", "https://www.adafruit.com/product/297", "red-led-5mm-297"],
+    resistor1K4294: ["Adafruit", "1 kΩ axial resistor", "https://www.adafruit.com/product/4294", "resistor-1k-4294"],
   } as const;
 
   it("uses only the verified direct official product pages", () => {

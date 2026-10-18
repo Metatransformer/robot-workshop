@@ -1,0 +1,55 @@
+import { expect, test } from "@playwright/test";
+import { readFile } from "node:fs/promises";
+import { extractText, getDocumentProxy } from "unpdf";
+
+test("external LED build travels from printable guide to project and source bundle", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await page.goto("/build-guides/sensor");
+  await page.getByRole("link", { name: "Build the external LED variant", exact: true }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(/LED/);
+  await expect(page.locator('a[href="https://www.adafruit.com/product/297"]').first()).toBeVisible();
+  await expect(page.locator('a[href="https://www.adafruit.com/product/4294"]').first()).toBeVisible();
+  const pdf = await page.pdf({ path: "test-results/sensor-led-guide.pdf", format: "A4", printBackground: true });
+  const document = await getDocumentProxy(new Uint8Array(pdf));
+  const { text } = await extractText(document, { mergePages: true });
+  expect(text).toContain("GP2");
+  expect(text).toContain("indicator.py");
+  expect(text).toContain("1.3");
+  expect(text).toMatch(/not.*(built|validated)|unbuilt/i);
+  await page.screenshot({ path: "test-results/sensor-led-desktop.png", fullPage: true });
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await page.evaluate(() => window.document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+  await page.screenshot({ path: "test-results/sensor-led-mobile.png", fullPage: true });
+  await page.getByRole("link", { name: "Open the external LED starter", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Start a local project" });
+  await dialog.getByRole("textbox", { name: "Project title", exact: true }).fill("External LED QA build");
+  await dialog.getByRole("button", { name: "Create project", exact: true }).click();
+  await expect(page.getByRole("link", { name: "Build the external LED indicator", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Files", exact: true }).click();
+  await expect(page.getByRole("button", { name: /^firmware\/indicator.py/ })).toBeVisible();
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.getByRole("button", { name: "Export source", exact: true }).click();
+  const exportDialog = page.getByRole("dialog", { name: "Review export source" });
+  for (const file of ["firmware/code.py", "firmware/indicator.py", "BUY_AND_BUILD.md", "WIRING.md"]) {
+    await exportDialog.getByRole("checkbox", { name: new RegExp(file.replaceAll(".", "\\.")) }).check();
+  }
+  const downloadPromise = page.waitForEvent("download");
+  await exportDialog.getByRole("button", { name: "Export selected", exact: true }).click();
+  const download = await downloadPromise;
+  const bundle = JSON.parse(await readFile((await download.path())!, "utf8"));
+  expect(bundle.project.templateId).toBe("sensor-led");
+  const code = bundle.files.find((file: { path: string }) => file.path === "firmware/code.py");
+  expect(Buffer.from(code.content, "base64").toString()).toContain("board.GP2");
+  expect(bundle.files.some((file: { path: string }) => file.path === "firmware/indicator.py")).toBe(true);
+  expect(bundle.project.bom.some((item: { itemId: string }) => item.itemId === "red-led-5mm-297")).toBe(true);
+  expect(bundle.project.bom.some((item: { itemId: string }) => item.itemId === "sensor-led-jumper-set")).toBe(true);
+  await page.getByRole("navigation", { name: "Main navigation" }).getByRole("button", { name: "Parts & tools", exact: true }).click();
+  await page.getByRole("textbox", { name: "Search catalog" }).fill("Adafruit red 5 mm LED");
+  await expect(page.getByRole("button", { name: /^View Adafruit red 5 mm LED/ })).toBeVisible();
+  await page.getByRole("textbox", { name: "Search catalog" }).fill("six wires");
+  await expect(page.getByRole("button", { name: /^View Male\/male jumper set/ })).toBeVisible();
+  await page.goto("/learn?project=sensor-led");
+  await expect(page.getByText("Make a reading visible", { exact: true })).toBeVisible();
+  expect(errors).toEqual([]);
+});

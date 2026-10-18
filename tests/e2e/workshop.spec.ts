@@ -77,7 +77,7 @@ test("learning guides connect templates and glossary anchors", async ({ page }) 
   await expect(page.locator("h2#torque")).toBeInViewport();
   await page.getByRole("button", { name: "Learning path", exact: true }).first().click();
   await page.getByRole("button", { name: "sensor tutorial", exact: true }).click();
-  await expect(dialog.getByRole("radio", { name: /Pico.*BME280/ })).toHaveAttribute("aria-checked", "true");
+  await expect(dialog.getByRole("radio", { name: /Pico \+ BME280 temperature indicator/ })).toHaveAttribute("aria-checked", "true");
   await dialog.getByRole("textbox", { name: "Project title", exact: true }).fill("Pico sensor learning build");
   await dialog.getByRole("button", { name: "Create project", exact: true }).click();
   await page.getByRole("button", { name: "Engineering plan", exact: true }).first().click();

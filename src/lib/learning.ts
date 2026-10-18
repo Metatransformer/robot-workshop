@@ -1,4 +1,4 @@
-type LearningTemplate = "linkage" | "desk-robot" | "cyberdeck" | "sensor" | "blank" | "servo-bench";
+type LearningTemplate = "linkage" | "desk-robot" | "cyberdeck" | "sensor" | "blank" | "servo-bench" | "sensor-led";
 
 type GlossaryTerm = {
   label: string;
@@ -13,6 +13,7 @@ const templateNames: Record<LearningTemplate, string> = {
   sensor: "Pico + BME280 temperature indicator",
   blank: "Your own engineering project",
   "servo-bench": "Pico + FS90 servo bench",
+  "sensor-led": "Pico + BME280 external LED indicator",
 };
 
 const glossaryTerms: GlossaryTerm[] = [
@@ -292,6 +293,24 @@ With USB and the external supply disconnected, identify the **FS90** label, the 
 
 Next read [README.md](README.md), then follow the exact procurement and assembly route in [BUY_AND_BUILD.md](BUY_AND_BUILD.md). Keep [GLOSSARY.md](GLOSSARY.md) open for unfamiliar terms, and read [ENGINEERING.md](ENGINEERING.md) before wiring or powering anything; it owns the interfaces, staged checks, measurements, and stop conditions.
 `,
+  "sensor-led": `# Start here — Pico + BME280 external LED indicator
+
+A **controller** follows instructions, a **sensor** turns environmental conditions into numbers, and an LED makes one software decision visible. In this project, an original Raspberry Pi Pico reads a BME280 and commands a separate red LED through a resistor. The light is an indicator, not a measurement of temperature or proof that the circuit is correct.
+
+## What you will build and learn
+
+You will connect the four-wire BME280 interface, add a resistor-limited external LED on GP2, load CircuitPython firmware, and compare the commanded LED state with the observed light. You will learn why LED direction matters, why the resistor must stay in series, and how voltage across that resistor can support a current estimate.
+
+## Prerequisites and what you need
+
+No previous electronics or programming experience is required. Gather the exact parts named in [BUY_AND_BUILD.md](BUY_AND_BUILD.md), including one red 5 mm LED and one 1 kΩ resistor from their seller packs. Keep USB disconnected while identifying parts and making connections. Do not infer polarity from color or from a trimmed lead.
+
+## Your first small step
+
+With every power source disconnected, place the LED and resistor on the bench without wiring them. Find the resistor markings, then identify the LED's anode and cathode using the received-part documentation and physical clues such as the flat edge; lead length alone is not reliable after trimming. Success is visible when you can name both LED leads, state that the 1 kΩ resistor must remain in series, and point to the two parts without applying power.
+
+Next read [README.md](README.md) and [WIRING.md](WIRING.md). Keep [GLOSSARY.md](GLOSSARY.md) open for unfamiliar terms. [WIRING.md](WIRING.md) is authoritative for the exact connections, and [ENGINEERING.md](ENGINEERING.md) is authoritative for requirements, calculations, staged tests, measurements, and stop conditions.
+`,
 };
 
 const nextSteps: Record<LearningTemplate, string> = {
@@ -318,6 +337,9 @@ const nextSteps: Record<LearningTemplate, string> = {
 - **Practice a lower-risk controller interface.** Goal: wire a Pico sensor, load code, and recognize healthy serial output without a motor load. Prerequisite: none. Open the [sensor tutorial](workshop:template/sensor).
 - **Learn a mechanism without motor power.** Goal: make and inspect a hand-driven card linkage before asking a servo to move a load. Prerequisite: none. Open the [linkage tutorial](workshop:template/linkage).
 - **Plan a mechanism integration.** Goal: apply the measured bench evidence to an expressive mechanism design with explicit load and clearance checks. Prerequisite: a validated unloaded servo bench and a freely moving mechanism. Open the [desk-robot concept tutorial](workshop:template/desk-robot); it is not an existing build-ready FS90 design.`,
+  "sensor-led": `- **Build the external indicator in stages.** Goal: identify polarity and resistance without power, trace all six signal and power connections, observe the startup test, then compare commanded state with light and measurements. Prerequisite: read the exact wiring and stop conditions. Stay with [this external LED tutorial](workshop:template/sensor-led).
+- **Practice the sensor with fewer components.** Goal: learn the four-wire BME280 interface and serial readings using the Pico's built-in indicator. Prerequisite: none beyond identifying the exact parts. Open the [original sensor tutorial](workshop:template/sensor).
+- **Carry the evidence into a custom project.** Goal: turn the measured GPIO, resistor, and sensor behavior into requirements for another visible indicator. Prerequisite: a completed bench record with observed light kept separate from commanded state. Open the [blank project](workshop:template/blank).`,
 };
 
 function learningPath(templateId: LearningTemplate): string {
