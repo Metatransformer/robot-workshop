@@ -307,3 +307,33 @@ with root-owned route/guide links; no extra MCU simulator or curriculum breadth.
 Acceptance: explain boot lockout, release-before-rearm, timeout and why servo pulse
 width differs from a DC motor's power duty cycle; inspect desktop/mobile and obtain
 independent critique before checkpoint.
+
+## Cycle 8 — understand the FS90 command before wiring (2026-10-18)
+
+Sol49285 owns new servo-command.ts model and differential test file; Sol55118 owns
+new servo-command-lab.tsx/CSS. Closed allowlists in respective packages, no workers
+may delegate or run browser checks. Root owns /labs/servo route, additive guide and
+PWM lesson links, E2E, reviews and docs. Existing Python firmware remains unchanged.
+Four scenarios teach boot lockout, stable release/repress, normal pulse and timeout.
+20ms ideal PWM frames are distinguished from20ms nominal software sampling and
+from shaft/load behavior. Independent critic checking contract before integration.
+
+Cycle8 complete: both Sol workers finished. Root refined events/labels/tool wording,
+audited exact file allowlists, and verified168 tests, typecheck, production build
+and both servo browser journeys. Independent source/differential and desktop/mobile
+review accepted. Existing Python firmware and old guide/project behavior preserved.
+
+Next concrete package: Pico/BME280 wiring inspection exercise. First inspect the
+exact sensor guide's Pico board and Adafruit breakout, current pin map, VIN-vs-3Vo
+notes and source citations; verify primary docs if any new electrical claim needed.
+Teach one correct four-wire netlist and three bounded faults: SDA/SCL swapped,
+missing reference ground, incorrect supply endpoint (select a definitely incorrect
+pin, not a different valid VIN voltage). Show physical pin numbers and GPIO labels
+separately, labeled connectors/net continuity, not colored-wire guessing. Learner
+identifies the fault, predicts consequence as uncertain where appropriate, chooses
+an UNPOWERED check, then reveals explanation and guide link. Pure netlist matching
+only, not circuit/MCU emulation, energized fault testing or hardware certification.
+Prefer new isolated model/component/test files with root-owned route/guide links.
+Acceptance: trace every endpoint, distinguish GPIO from physical numbering, explain
+why color is insufficient, and choose a continuity/label check before applying power.
+Have independent critic inspect actual diagram/mobile and source-backed explanations.

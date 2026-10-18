@@ -2,16 +2,12 @@ import { expect, test } from "@playwright/test";
 import { extractText, getDocumentProxy } from "unpdf";
 
 test("FS90 bench starter has a printable guide, source files and a linked learning path", async ({ page }) => {
-  let firstBootstrap = true;
   await page.route("**/api/workshop?action=bootstrap", async (route) => {
     const response = await route.fetch();
     const data = await response.json();
-    if (firstBootstrap) {
-      data.data.library = data.data.library.filter((item: { id: string }) => item.id !== "feetech-fs90");
-      firstBootstrap = false;
-    }
+    data.data.library = data.data.library.filter((item: { id: string }) => item.id !== "feetech-fs90");
     await route.fulfill({ response, json: data });
-  });
+  }, { times: 1 });
   await page.goto("/build-guides/servo");
   await expect(page.getByRole("heading", {level:1})).toContainText(/FS90/);
   await expect(page.locator('a[href="https://www.pololu.com/product/2818"]').first()).toBeVisible();

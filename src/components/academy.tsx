@@ -458,6 +458,7 @@ function LessonReader({ lesson, project, progress, noteDraft, noteError, quizAtt
           <button className="academy-primary-button" type="button" onClick={onMarkRead} disabled={progress.read}>{progress.read ? <CheckCircle2 aria-hidden="true" /> : <BookOpen aria-hidden="true" />}{progress.read ? "Marked as read" : "Mark as read"}</button>
           <a href={`/learn/print?lesson=${encodeURIComponent(lesson.id)}`} target="_blank" rel="noreferrer"><FileDown aria-hidden="true" /> Print / Save PDF</a>
           {lesson.simulation && <Link href={`/labs?lab=${encodeURIComponent(lesson.simulation)}`}><FlaskConical aria-hidden="true" /> Open related lab</Link>}
+          {lesson.id === "timers-pwm" && <Link href="/labs/servo"><FlaskConical aria-hidden="true" /> Explore the FS90 servo command</Link>}
         </div>
         <div className="academy-progress-row" aria-label="Lesson progress">
           <ProgressMark done={progress.read} label="Read" /><ProgressMark done={progress.practiced} label="Practiced" /><ProgressMark done={progress.demonstrated} label="Bench demonstrated" />

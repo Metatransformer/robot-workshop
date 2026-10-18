@@ -7,6 +7,7 @@ export default function ServoBuildGuidePage() {
   return <>
     <nav className="appchrome" aria-label="Servo build actions" style={{padding:"16px 24px",display:"flex",gap:24,flexWrap:"wrap",fontFamily:"system-ui"}}>
       <a href="/?template=servo-bench">Open the FS90 bench starter</a>
+      <a href="/labs/servo">Explore button and pulse commands</a>
       <a href="/learn?project=servo-bench">Learn the supporting theory</a>
     </nav>
     <PrintReport {...servoBenchGuide} backHref="/" />

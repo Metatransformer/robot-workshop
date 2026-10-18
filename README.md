@@ -67,6 +67,13 @@ release. This unloaded bench route has not been physically built or validated.
 Creating a starter adds missing BOM definitions to the local catalog while
 preserving existing inventory records and project files.
 
+At `/labs/servo`, predict the FS90 starter's response to a normal press, a button
+held at boot, a too-short release, or the five-second timeout. Step through the
+command trace and compare it with one ideal 20 ms PWM frame. The browser model is
+differential-tested against the exported Python controller; it models commands,
+not servo angle, torque, electrical load or physical validation. Links from the
+build guide, PWM lesson and labs connect the exercise to the actual starter.
+
 At `/bench/sensor`, paste or import the starter firmware’s serial CSV, inspect
 separate recording segments and scatter plots, and export readings plus bench
 observations. Diagnostics and source line numbers remain in the JSON report.

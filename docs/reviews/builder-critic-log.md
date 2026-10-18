@@ -233,3 +233,40 @@ Next: the critic recommends an FS90 command explorer tied to the existing firmwa
 button/state/pulse timelines and20ms PWM frames, not simulated shaft motion. This
 moves learning toward understanding an actual starter instead of further notebook
 polish. Differential tests against the exported Python controller are the gate.
+
+## Round 8 — predict the starter's servo command
+
+Added /labs/servo with four prediction/feedback exercises, sampled controller trace,
+step controls, exact numeric values, event table and one ideal20ms PWM frame. Linked
+from the existing FS90 guide, PWM lesson and labs navigation; original destinations
+remain. Python firmware is unchanged. The TypeScript model matches original
+controller states and pulses at every preset sample, with further boundary,
+fractional-rounding, nonfinite/backwards/repeated-clock comparisons to actual
+exported Python. Ideal duty percentage remains separate from hardware quantization,
+loop jitter and physical servo behavior. No angle/torque/load/power model is claimed.
+
+Independent critic requested that rejected button changes appear even when state
+doesn't change, and that trace changes be held steps rather than diagonal ramps.
+The implementation has both. Root trimmed the initial event table's per-pulse rows
+to button/state transitions, preserving the important1.02s failed re-press. Root
+also enlarged mobile axis labels, fixed long labels overflowing chart margins,
+and corrected the pulse-measurement tool wording to logic analyzer/oscilloscope.
+Actual desktop/mobile screenshots reviewed; final independent visual verdict below.
+
+Root reproduced168 tests across25 files, typecheck and production build. Both servo
+browser journeys passed: existing printed-guide/starter/catalog path plus all four
+predictions, incorrect-answer feedback, exact1500us/7.50% selected values, compact
+events including failed repress, step endpoints,390px width, and lesson discoverability.
+The first combined browser run exposed an existing starter mock intercepting later
+bootstrap requests after teardown; limited it to the single initial request it was
+intended to modify and reran both journeys successfully. No product assertion was
+weakened. Both Sol packages finished within their closed two-file allowlists; root
+reviewed their files and additive integration. No purchases, flashing, publication
+or hardware measurements occurred.
+
+Final independent visual verdict: accepted, no material teaching/correctness blocker.
+Next bounded suggestion: Pico/BME280 wiring inspection practice, using the exact
+existing board endpoints and an explicit netlist. Teach physical pin versus GPIO
+name, SDA/SCL swap, missing common ground and an incorrect supply endpoint with
+unpowered checks. It must not claim electrical simulation or approval of arbitrary
+wiring; verify exact variants before authoring the fault explanations.
