@@ -386,3 +386,27 @@ single-threshold comparison, fault/reset and links to the physical threshold che
 Sol implements isolated model/UI packages with closed allowlists. Differential
 execution against exported Python is required; keep commands separate from measured
 light and do not infer temperature dynamics or physical brightness.
+
+
+## Cycle 11 — see why the indicator retains state (2026-10-18)
+
+Sol8563 owns sensor-hysteresis.ts and differential tests; Sol43782 owns the new
+component/CSS. Closed allowlists in hysteresis-model.md and hysteresis-ui.md.
+Root owns route, additive guide/lesson/labs links, browser checks and review.
+Three fixed sequences teach retained state, single-threshold chatter, and clearing
+state on fault/restart. Startup pulses and sensor/thermal behavior remain outside
+the model. Existing firmware files are unchanged and serve as the reference.
+
+
+Cycle11 complete: three prediction sequences with exact Python sample comparisons,
+step navigation, comparator table and honest fault/restart limits. Root repaired
+handoff file instructions, clarified prior-state labels and question wording.
+Verified186 tests, typecheck, production build, new browser journey and existing
+LED export/catalog flow. All existing firmware and projects preserved.
+
+Next concrete package: LED resistor measurement worksheet tied to the build guide.
+Show exact voltage-probe nodes and isolated resistance measurement conditions;
+accept observed R and resistor voltage, derive I/P with units and assumptions,
+keep nominal calculations and user-entered observations distinct, and provide a
+portable/printable bench record. Plan closed files and independently review units,
+input validation and evidence wording before building; no physical-validation claims.

@@ -679,7 +679,7 @@ export default function SimulationLab({ initialLab }: { initialLab?: string }) {
     <div className="sim-shell">
       <header className="sim-header">
         <Link className="sim-brand" href="/"><span>MT</span><strong>Simulation labs</strong></Link>
-        <nav aria-label="Lab navigation"><Link href="/learn">Academy</Link><Link href="/labs/servo">FS90 command explorer</Link><Link href="/labs/sensor-wiring">Sensor wiring practice</Link><Link href={`/learn?lesson=${labInfo[lab].lesson}`}>Related lesson</Link><Link href="/">Workshop</Link></nav>
+        <nav aria-label="Lab navigation"><Link href="/learn">Academy</Link><Link href="/labs/servo">FS90 command explorer</Link><Link href="/labs/sensor-wiring">Sensor wiring practice</Link><Link href="/labs/hysteresis">Temperature hysteresis</Link><Link href={`/learn?lesson=${labInfo[lab].lesson}`}>Related lesson</Link><Link href="/">Workshop</Link></nav>
       </header>
       {notice && <div className={`sim-notice is-${notice.kind}`} role={notice.kind === "error" ? "alert" : "status"}><span>{notice.text}</span><button type="button" aria-label="Dismiss message" onClick={() => setNotice(null)}>×</button></div>}
       <main>

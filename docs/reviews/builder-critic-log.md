@@ -343,3 +343,38 @@ Next concrete package: a bounded temperature hysteresis explorer tied to indicat
 Show temperature, prior state and next commanded state; compare a single threshold,
 include fault/reset and explain startup/restoration separately. Differential-test
 against the actual exported Python. No thermal, optical or brightness simulation.
+
+
+## Round 11 — explain retained state through exact firmware decisions
+
+Added /labs/hysteresis with three prediction/retry sequences, a step navigator,
+previous/new command values and full comparison table. Memory and chatter cases
+show where a single28°C threshold differs; fault and post-startup restart clear the
+remembered command. Existing firmware is unchanged. Sample decisions are compared
+against actual exported indicator.py across presets, exact/near boundaries and
+1024 deterministic temperatures. Fault/reset transitions are explicit harness rules,
+not claimed full firmware emulation. Startup pulses and physical behavior excluded.
+
+Independent critic required explicit 'previous hysteresis command' labeling and
+separation of imposed comparator clearing from Python sample checks. Root applied
+those, clarified comparison headings and made every question ask the command at a
+numbered step. The first attempted handoff-copy replacement silently missed the
+worker's final wording; independent review caught the remaining indicator.py edit
+instruction. Root used an asserted exact replacement to direct HIGH_C/LOW_C edits
+to code.py and added a browser assertion for that instruction. Final rerun passed.
+
+Both Sol packages stayed within their two-file allowlists. Root audited all hunks
+and additive guide/lesson/labs links, preserving existing destinations. Worker ran
+the default parallel suite beyond requested focused checks and saw an unrelated
+project-format timeout; its serialized suite passed. Root independently reproduced
+186 tests across29 files with maxWorkers2, typecheck and production build. Browser
+checks cover all predictions, incorrect feedback, retries, table values, step bounds,
+390px width, reload without page errors, lesson links and the existing LED guide /
+PDF / project / bundle / catalog journey. Desktop/mobile critic accepted layout;
+final handoff correction and refreshed evidence resolve its only source blocker.
+No measurements, hardware flashing, purchases or external publication occurred.
+
+Next bounded package: an LED resistor measurement worksheet. Name exact probe nodes,
+accept observed resistor resistance and voltage, derive current/power with units,
+and preserve user-entered evidence separately from nominal estimates in a printable
+record. No automatic assertion that entered values were measured or circuit validated.

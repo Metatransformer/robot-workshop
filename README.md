@@ -81,6 +81,12 @@ differential-tested against the exported Python controller; it models commands,
 not servo angle, torque, electrical load or physical validation. Links from the
 build guide, PWM lesson and labs connect the exercise to the actual starter.
 
+At `/labs/hysteresis`, predict the external LED starter's commands, then step
+through retained state, threshold chatter, faults and restart. Compare with a
+single-threshold rule in a readable state table. Sample decisions are checked
+against the exported Python; startup pulses and physical temperature/light behavior
+are outside this model. Open it from the LED guide, state lesson or labs.
+
 At `/labs/sensor-wiring`, inspect four Pico/BME280 connection diagrams, diagnose
 swapped signals, missing ground or a wrong supply endpoint, and choose an unpowered
 check. A separate breadboard exercise teaches isolated five-contact strips. Physical
