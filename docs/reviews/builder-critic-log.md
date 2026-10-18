@@ -378,3 +378,32 @@ Next bounded package: an LED resistor measurement worksheet. Name exact probe no
 accept observed resistor resistance and voltage, derive current/power with units,
 and preserve user-entered evidence separately from nominal estimates in a printable
 record. No automatic assertion that entered values were measured or circuit validated.
+
+## Round 12 — final LED measurement worksheet and delivery
+
+Delivered /bench/led with exact resistor probe nodes, isolated resistance and DC
+voltage instructions, signed inferred current, conditional steady-DC resistor power,
+raw observation metadata, browser-local drafts, JSON export and printable records.
+Nominal estimates remain separate. Flicker explicitly invalidates treating squared
+average voltage as average heating power. No readings are seeded or called verified.
+
+Two Sol workers created only their closed two-file allowlists; root reviewed model,
+UI, scoped styles and additive guide/lesson links. Existing links and project flows
+remain intact. Independent review required steady-DC limits in exported records and
+manual-copy guidance when incomplete drafts cannot save. Root applied those fixes.
+Browser checks exposed unstable label lookup as select/textarea content changed;
+root added stable accessible names. The rerun passes all four relevant scenarios:
+measurement reload/JSON/PDF, failed storage with cancelled navigation, hysteresis,
+and the LED guide/project/source-bundle/catalog journey. Synthetic QA only.
+
+Root reproduced 207 unit tests across 30 files with maxWorkers=2, typecheck, production
+build and diff whitespace checks. Desktop/mobile screenshots accepted independently;
+PDF text extraction verifies observations and unverified provenance. This does not
+establish physical behavior, a live paid-agent session, or curriculum completeness.
+
+The user requested finish and deliver. The heartbeat was paused and no further
+expansion is queued. See docs/DELIVERY.md for the complete capability/limitation
+handoff. Next practical work is user-led: build the original Pico/BME280 route,
+record received component identities and actual bench evidence, then add the LED.
+A future software package should verify one real authenticated ACP session before
+claiming that agent journey ready; it is not part of this completed cycle.

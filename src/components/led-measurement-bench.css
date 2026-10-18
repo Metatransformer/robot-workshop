@@ -1,0 +1,876 @@
+.led-bench-shell {
+  --led-bench-cream: #f4efe2;
+  --led-bench-paper: #fffdf6;
+  --led-bench-ink: #17271f;
+  --led-bench-green: #21583d;
+  --led-bench-green-dark: #123a28;
+  --led-bench-green-soft: #dfeadf;
+  --led-bench-rust: #a8472c;
+  --led-bench-rust-dark: #7b2f1d;
+  --led-bench-gold: #e9b85f;
+  --led-bench-muted: #59655e;
+  --led-bench-line: #c8c1b2;
+  --led-bench-sans: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --led-bench-serif: Georgia, "Times New Roman", serif;
+  --led-bench-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  min-height: 100dvh;
+  overflow-x: clip;
+  background: var(--led-bench-cream);
+  color: var(--led-bench-ink);
+  font-family: var(--led-bench-sans);
+  font-size: 16px;
+}
+
+.led-bench-shell * {
+  box-sizing: border-box;
+}
+
+.led-bench-shell a {
+  color: inherit;
+}
+
+.led-bench-shell button,
+.led-bench-shell input,
+.led-bench-shell select,
+.led-bench-shell textarea {
+  font: inherit;
+}
+
+.led-bench-shell button:focus-visible,
+.led-bench-shell input:focus-visible,
+.led-bench-shell select:focus-visible,
+.led-bench-shell textarea:focus-visible,
+.led-bench-shell a:focus-visible {
+  outline: 3px solid var(--led-bench-gold);
+  outline-offset: 3px;
+}
+
+.led-bench-shell button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+.led-bench-header {
+  min-height: 72px;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  background: var(--led-bench-ink);
+  color: #fffaf0;
+  border-bottom: 1px solid #09120d;
+}
+
+.led-bench-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 24px;
+  border-right: 1px solid #4d5a53;
+  font: 650 1rem var(--led-bench-serif);
+  text-decoration: none;
+}
+
+.led-bench-brand-mark {
+  padding: 5px 7px;
+  background: var(--led-bench-rust);
+  color: #fff;
+  font: 750 0.68rem var(--led-bench-mono);
+  letter-spacing: 0.08em;
+}
+
+.led-bench-nav {
+  display: flex;
+  align-items: stretch;
+  padding-right: 12px;
+}
+
+.led-bench-nav a {
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  border-bottom: 3px solid transparent;
+  color: #d4ddd7;
+  font-size: 0.86rem;
+  font-weight: 750;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.led-bench-nav a:hover {
+  border-color: var(--led-bench-gold);
+  color: #fff;
+}
+
+.led-bench-main {
+  width: min(calc(100% - 48px), 1120px);
+  margin: 0 auto;
+  padding: 58px 0 88px;
+}
+
+.led-bench-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 44px;
+  align-items: end;
+  padding-bottom: 42px;
+  border-bottom: 1px solid var(--led-bench-line);
+}
+
+.led-bench-intro-copy {
+  max-width: 800px;
+}
+
+.led-bench-eyebrow {
+  margin: 0;
+  color: var(--led-bench-rust-dark);
+  font: 750 0.72rem var(--led-bench-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.led-bench-intro-copy h1 {
+  margin: 13px 0 18px;
+  font: 600 clamp(2.8rem, 6vw, 5.2rem)/0.98 var(--led-bench-serif);
+  letter-spacing: -0.05em;
+}
+
+.led-bench-lede {
+  max-width: 760px;
+  margin: 0;
+  color: #46534c;
+  font: 1.08rem/1.7 var(--led-bench-serif);
+}
+
+.led-bench-verification {
+  padding: 20px;
+  border: 1px solid #a8b6aa;
+  background: var(--led-bench-green-soft);
+}
+
+.led-bench-verification-dot {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  margin-right: 7px;
+  border-radius: 50%;
+  background: var(--led-bench-rust);
+}
+
+.led-bench-verification strong {
+  color: var(--led-bench-green-dark);
+  font-size: 0.9rem;
+}
+
+.led-bench-verification p {
+  margin: 8px 0 0;
+  color: #435249;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.led-bench-probe-instructions,
+.led-bench-entry {
+  padding: 62px 0 0;
+}
+
+.led-bench-section-heading {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 27px;
+}
+
+.led-bench-step-number {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  background: var(--led-bench-green);
+  color: #fff;
+  font: 750 0.72rem var(--led-bench-mono);
+}
+
+.led-bench-heading-copy p {
+  margin: 0 0 4px;
+  color: var(--led-bench-rust-dark);
+  font: 750 0.7rem var(--led-bench-mono);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.led-bench-heading-copy h2 {
+  margin: 0;
+  font: 600 clamp(1.7rem, 4vw, 2.1rem)/1.1 var(--led-bench-serif);
+}
+
+.led-bench-schematic {
+  margin: 0;
+  border: 1px solid var(--led-bench-line);
+  background: var(--led-bench-paper);
+}
+
+.led-bench-schematic-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  color: var(--led-bench-green-dark);
+}
+
+.led-bench-wire,
+.led-bench-resistor,
+.led-bench-led-bar {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.led-bench-led-triangle {
+  fill: #f4c96f;
+  stroke: currentColor;
+  stroke-width: 4;
+}
+
+.led-bench-node {
+  fill: var(--led-bench-rust);
+  stroke: #fff;
+  stroke-width: 4;
+}
+
+.led-bench-node-label,
+.led-bench-component-label {
+  fill: var(--led-bench-ink);
+  font: 700 14px var(--led-bench-mono);
+}
+
+.led-bench-component-label {
+  fill: var(--led-bench-rust-dark);
+  font-size: 13px;
+}
+
+.led-bench-schematic-caption {
+  padding: 14px 18px;
+  border-top: 1px solid var(--led-bench-line);
+  color: var(--led-bench-muted);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.led-bench-schematic-path {
+  margin: 0;
+  padding: 13px 18px;
+  border-top: 1px solid var(--led-bench-line);
+  color: var(--led-bench-green-dark);
+  font: 700 0.8rem/1.55 var(--led-bench-mono);
+  text-align: center;
+}
+
+.led-bench-instruction-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin: 24px 0 0;
+  padding: 1px;
+  background: var(--led-bench-line);
+  list-style: none;
+}
+
+.led-bench-instruction {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  gap: 15px;
+  padding: 24px;
+  background: var(--led-bench-paper);
+}
+
+.led-bench-instruction-index {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--led-bench-green);
+  color: var(--led-bench-green-dark);
+  font: 750 0.75rem var(--led-bench-mono);
+}
+
+.led-bench-instruction-copy h3 {
+  margin: 2px 0 9px;
+  color: var(--led-bench-green-dark);
+  font: 700 1rem/1.3 var(--led-bench-serif);
+}
+
+.led-bench-instruction-copy p {
+  margin: 0;
+  color: #47544c;
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.led-bench-instruction-copy a {
+  color: var(--led-bench-rust-dark);
+  font-weight: 750;
+}
+
+.led-bench-danger-note {
+  display: flex;
+  gap: 12px 24px;
+  align-items: baseline;
+  margin-top: 18px;
+  padding: 17px 20px;
+  border-left: 5px solid var(--led-bench-rust);
+  background: #f8dfd5;
+  color: #572316;
+  line-height: 1.5;
+}
+
+.led-bench-danger-note strong {
+  flex: 0 0 auto;
+}
+
+.led-bench-form {
+  padding: 30px;
+  border: 1px solid var(--led-bench-line);
+  background: var(--led-bench-paper);
+}
+
+.led-bench-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 23px 20px;
+}
+
+.led-bench-field {
+  min-width: 0;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+
+.led-bench-field-wide {
+  grid-column: 1 / -1;
+}
+
+.led-bench-label {
+  color: var(--led-bench-green-dark);
+  font-size: 0.88rem;
+  font-weight: 750;
+}
+
+.led-bench-field-hint {
+  margin-top: -5px;
+  color: var(--led-bench-muted);
+  font-size: 0.77rem;
+}
+
+.led-bench-input,
+.led-bench-select,
+.led-bench-textarea {
+  width: 100%;
+  min-height: 49px;
+  padding: 11px 13px;
+  border: 1px solid #8c948d;
+  border-radius: 0;
+  background: #fff;
+  color: var(--led-bench-ink);
+}
+
+.led-bench-textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.led-bench-save-status {
+  margin-top: 22px;
+  padding: 12px 14px;
+  border: 1px solid #b7b2a7;
+  background: #f1eee5;
+  color: #465148;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.led-bench-save-status-saved {
+  border-color: #9cb3a1;
+  background: var(--led-bench-green-soft);
+  color: var(--led-bench-green-dark);
+}
+
+.led-bench-save-status-failed,
+.led-bench-save-status-invalid {
+  border-color: #d6a28f;
+  background: #f8dfd5;
+  color: #672918;
+}
+
+.led-bench-errors {
+  margin-top: 18px;
+  padding: 17px 19px;
+  border-left: 5px solid var(--led-bench-rust);
+  background: #f8dfd5;
+  color: #5f2617;
+}
+
+.led-bench-error-list {
+  margin: 9px 0 0;
+  padding-left: 20px;
+  line-height: 1.6;
+}
+
+.led-bench-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.led-bench-button {
+  min-height: 48px;
+  padding: 11px 17px;
+  border: 1px solid var(--led-bench-green-dark);
+  border-radius: 0;
+  background: transparent;
+  color: var(--led-bench-green-dark);
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.led-bench-button:not(:disabled):hover {
+  background: var(--led-bench-green-soft);
+}
+
+.led-bench-button-primary {
+  background: var(--led-bench-green);
+  color: #fff;
+}
+
+.led-bench-button-primary:not(:disabled):hover {
+  background: var(--led-bench-green-dark);
+}
+
+.led-bench-export-error {
+  margin: 14px 0 0;
+  color: var(--led-bench-rust-dark);
+  font-weight: 700;
+}
+
+.led-bench-review-needed {
+  margin: 14px 0 0;
+  color: var(--led-bench-green-dark);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.led-bench-record {
+  margin-top: 62px;
+  padding: 34px;
+  border: 2px solid var(--led-bench-green-dark);
+  background: #fff;
+}
+
+.led-bench-record-heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--led-bench-line);
+}
+
+.led-bench-record-heading h2 {
+  margin: 8px 0 0;
+  font: 600 clamp(2rem, 5vw, 3.4rem)/1 var(--led-bench-serif);
+  letter-spacing: -0.035em;
+}
+
+.led-bench-provenance {
+  flex: 0 0 auto;
+  padding: 8px 10px;
+  border: 1px solid #bf7b64;
+  background: #f8dfd5;
+  color: #642716;
+  font: 750 0.7rem var(--led-bench-mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.led-bench-record-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin: 26px 0 0;
+  padding: 1px;
+  background: var(--led-bench-line);
+}
+
+.led-bench-record-item {
+  min-width: 0;
+  padding: 15px 17px;
+  background: var(--led-bench-paper);
+}
+
+.led-bench-record-item-wide {
+  grid-column: 1 / -1;
+}
+
+.led-bench-record-derived {
+  background: var(--led-bench-green-soft);
+}
+
+.led-bench-record-item dt {
+  margin-bottom: 6px;
+  color: var(--led-bench-muted);
+  font: 700 0.69rem var(--led-bench-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.led-bench-record-item dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--led-bench-ink);
+  font-size: 0.96rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.led-bench-record-derived dd {
+  color: var(--led-bench-green-dark);
+  font-size: 1.18rem;
+  font-weight: 800;
+}
+
+.led-bench-record-notice {
+  margin-top: 18px;
+  padding: 17px 19px;
+  border-left: 5px solid var(--led-bench-gold);
+  background: #fff3d9;
+}
+
+.led-bench-record-notice p {
+  margin: 6px 0 0;
+  color: #534838;
+  line-height: 1.55;
+}
+
+.led-bench-record-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px;
+  margin-top: 28px;
+}
+
+.led-bench-record-list-block h3 {
+  margin: 0 0 10px;
+  color: var(--led-bench-green-dark);
+  font: 700 1.05rem var(--led-bench-serif);
+}
+
+.led-bench-record-list-block p {
+  margin: 0;
+  color: var(--led-bench-muted);
+  line-height: 1.55;
+}
+
+.led-bench-record-list {
+  margin: 0;
+  padding-left: 19px;
+  color: #455149;
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.led-bench-record-list li + li {
+  margin-top: 7px;
+}
+
+.led-bench-print-empty {
+  display: none;
+}
+
+.led-bench-nominal {
+  margin-top: 62px;
+  padding: 28px 30px;
+  border: 1px solid #b9ad91;
+  background: #eee4cf;
+}
+
+.led-bench-nominal-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.led-bench-nominal-heading h2 {
+  margin: 0;
+  color: var(--led-bench-green-dark);
+  font: 600 1.7rem var(--led-bench-serif);
+}
+
+.led-bench-nominal-values {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1px;
+  margin-top: 21px;
+  padding: 1px;
+  background: #b9ad91;
+}
+
+.led-bench-nominal-value {
+  display: grid;
+  gap: 4px;
+  padding: 13px;
+  background: #fffaf0;
+  color: var(--led-bench-muted);
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+.led-bench-nominal-value strong {
+  color: var(--led-bench-green-dark);
+  font: 750 1.05rem var(--led-bench-mono);
+}
+
+.led-bench-nominal-note {
+  max-width: 900px;
+  margin: 18px 0 0;
+  color: #514b40;
+  font-size: 0.86rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 760px) {
+  .led-bench-header {
+    min-height: auto;
+    display: block;
+  }
+
+  .led-bench-brand {
+    min-height: 60px;
+    border-right: 0;
+    border-bottom: 1px solid #4d5a53;
+  }
+
+  .led-bench-nav {
+    min-height: 50px;
+    padding: 0 10px;
+  }
+
+  .led-bench-nav a {
+    flex: 1;
+    justify-content: center;
+    padding: 0 9px;
+  }
+
+  .led-bench-main {
+    width: min(calc(100% - 30px), 1120px);
+    padding: 38px 0 64px;
+  }
+
+  .led-bench-intro {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+
+  .led-bench-intro-copy h1 {
+    font-size: clamp(2.55rem, 13vw, 4rem);
+  }
+
+  .led-bench-probe-instructions,
+  .led-bench-entry {
+    padding-top: 48px;
+  }
+
+  .led-bench-schematic {
+    overflow-x: auto;
+  }
+
+  .led-bench-schematic-svg {
+    min-width: 720px;
+  }
+
+  .led-bench-instruction-list,
+  .led-bench-form-grid,
+  .led-bench-record-grid,
+  .led-bench-record-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .led-bench-field-wide,
+  .led-bench-record-item-wide {
+    grid-column: auto;
+  }
+
+  .led-bench-danger-note {
+    display: grid;
+  }
+
+  .led-bench-form,
+  .led-bench-record,
+  .led-bench-nominal {
+    padding: 22px 18px;
+  }
+
+  .led-bench-record-heading,
+  .led-bench-nominal-heading {
+    display: grid;
+  }
+
+  .led-bench-provenance {
+    width: fit-content;
+  }
+
+  .led-bench-nominal-values {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 420px) {
+  .led-bench-main {
+    width: calc(100% - 24px);
+  }
+
+  .led-bench-brand {
+    padding: 0 16px;
+  }
+
+  .led-bench-section-heading {
+    align-items: flex-start;
+  }
+
+  .led-bench-instruction {
+    grid-template-columns: 32px minmax(0, 1fr);
+    gap: 11px;
+    padding: 19px 15px;
+  }
+
+  .led-bench-instruction-index {
+    width: 30px;
+    height: 30px;
+  }
+
+  .led-bench-actions {
+    display: grid;
+  }
+
+  .led-bench-button {
+    width: 100%;
+  }
+
+  .led-bench-nominal-values {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media print {
+  .led-bench-shell {
+    min-height: auto;
+    overflow: visible;
+    background: #fff;
+    color: #111;
+    font-size: 11pt;
+  }
+
+  .led-bench-header,
+  .led-bench-intro,
+  .led-bench-entry,
+  .led-bench-actions,
+  .led-bench-save-status,
+  .led-bench-export-error {
+    display: none !important;
+  }
+
+  .led-bench-review-needed {
+    display: none !important;
+  }
+
+  .led-bench-main {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .led-bench-probe-instructions {
+    padding: 0;
+  }
+
+  .led-bench-section-heading {
+    margin-bottom: 14px;
+  }
+
+  .led-bench-schematic-svg {
+    max-height: 145px;
+  }
+
+  .led-bench-instruction-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 14px;
+  }
+
+  .led-bench-instruction {
+    padding: 11px;
+    break-inside: avoid;
+  }
+
+  .led-bench-instruction-copy p,
+  .led-bench-schematic-caption,
+  .led-bench-record-list,
+  .led-bench-nominal-note {
+    font-size: 8.5pt;
+  }
+
+  .led-bench-danger-note {
+    margin-top: 10px;
+    padding: 10px 12px;
+  }
+
+  .led-bench-record {
+    margin-top: 24px;
+    padding: 20px;
+    break-before: page;
+  }
+
+  .led-bench-record-heading h2 {
+    font-size: 25pt;
+  }
+
+  .led-bench-record-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .led-bench-record-columns {
+    gap: 20px;
+  }
+
+  .led-bench-print-empty {
+    display: block;
+    margin-top: 24px;
+    padding: 18px;
+    border: 2px solid #111;
+    break-inside: avoid;
+  }
+
+  .led-bench-print-empty h2 {
+    margin: 0 0 8px;
+    font: 700 18pt var(--led-bench-serif);
+  }
+
+  .led-bench-print-empty p {
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .led-bench-nominal {
+    margin-top: 24px;
+    padding: 18px;
+    break-inside: avoid;
+  }
+
+  .led-bench-nominal-values {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}

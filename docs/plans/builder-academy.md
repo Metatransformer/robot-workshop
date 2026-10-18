@@ -410,3 +410,20 @@ accept observed R and resistor voltage, derive I/P with units and assumptions,
 keep nominal calculations and user-entered observations distinct, and provide a
 portable/printable bench record. Plan closed files and independently review units,
 input validation and evidence wording before building; no physical-validation claims.
+
+
+## Cycle 12 — final measurement worksheet and handoff (2026-10-18)
+
+User requested finish and delivery. Automation paused; no further expansion cycles.
+Sol94388 owns led-measurement.ts/tests; Sol50437 owns component/CSS, closed allowlists
+in led-measurement work packages. Root owns route, additive guide/hysteresis links,
+browser checks and final review. Worksheet keeps entered evidence, inferred current
+and power, and nominal assumptions distinct; browser-local draft and PDF/JSON export.
+Existing projects and hardware remain untouched. Finish this slice, verify, checkpoint,
+and deliver practical start steps plus explicit remaining gaps.
+
+Cycle 12 complete: LED measurement worksheet, local draft recovery, JSON/print
+records and connected guide links verified. Final root gates: 207 unit tests,
+typecheck, production build, four relevant browser scenarios and independent
+source/desktop/mobile acceptance. Delivery documented in docs/DELIVERY.md.
+User requested finish; autonomous expansion is paused. No new work package active.

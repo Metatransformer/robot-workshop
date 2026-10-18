@@ -3,6 +3,8 @@
 A local workshop for physical invention. Bring a coding agent, collect real parts,
 write engineering plans, and build a project you can take into ordinary tools.
 
+See [the delivery handoff](docs/DELIVERY.md) for the guided starting path, verified capabilities and remaining limitations.
+
 ## Run the workshop
 
 Requires Node.js 22+ and pnpm 10.

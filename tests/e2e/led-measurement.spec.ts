@@ -1,0 +1,61 @@
+import { expect, test } from "@playwright/test";
+import { readFile } from "node:fs/promises";
+import { extractText, getDocumentProxy } from "unpdf";
+
+test("record LED measurements, retain a local draft and export honest JSON/PDF", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await page.goto("/build-guides/sensor-led");
+  await page.getByRole("link", { name: "Record LED measurements", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Measure the LED circuit", exact: true })).toBeVisible();
+  await page.getByLabel("Measured resistance (Ω)", { exact: true }).fill("1005");
+  await page.getByLabel("Resistor voltage (V)", { exact: true }).fill("1.2");
+  await page.getByLabel("Observation date/time").fill("2026-10-18 14:00 MDT — synthetic QA entry");
+  await page.getByLabel("Part identity", { exact: true }).fill("Synthetic QA LED297 / resistor4294");
+  await page.getByLabel("Meter and range", { exact: true }).fill("Synthetic meter record, DC V");
+  await page.getByLabel("Bench notes", { exact: true }).fill("Synthetic software test; no hardware measured.");
+  await page.getByLabel("Commanded LED", { exact: true }).selectOption("on");
+  await page.getByLabel("Observed light", { exact: true }).selectOption("off");
+  await page.reload();
+  await expect(page.getByLabel("Bench notes", { exact: true })).toHaveValue("Synthetic software test; no hardware measured.");
+  await page.getByRole("button", { name: "Calculate record", exact: true }).click();
+  const downloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Download record JSON", exact: true }).click();
+  const download = await downloadPromise;
+  const record = JSON.parse(await readFile((await download.path())!, "utf8"));
+  expect(record.provenance).toBe("user-entered-unverified");
+  expect(record.derived.currentMa).toBeCloseTo(1.2 / 1005 * 1000, 10);
+  expect(record.derived.powerMw).toBeCloseTo(1.2 * 1.2 / 1005 * 1000, 10);
+  expect(record.nominal.currentMa).toBe(1.3);
+  expect(record.input.light).toBe("off");
+  expect(record.input.notes).toContain("no hardware measured");
+  const pdf = await page.pdf({ path: "test-results/led-measurement.pdf", format: "A4", printBackground: true });
+  const document = await getDocumentProxy(new Uint8Array(pdf));
+  const { text } = await extractText(document, { mergePages: true });
+  expect(text).toContain("Synthetic software test");
+  expect(text).toMatch(/unverified/i);
+  expect(text).toContain("1005");
+  await page.getByLabel("Resistor voltage (V)", { exact: true }).fill("");
+  await expect(page.getByRole("button", { name: "Download record JSON", exact: true })).toBeDisabled();
+  await page.getByLabel("Resistor voltage (V)", { exact: true }).fill("-1.2");
+  await page.getByRole("button", { name: "Calculate record", exact: true }).click();
+  await page.evaluate(() => window.document.fonts.ready);
+  await page.screenshot({ path: "test-results/led-measurement-desktop.png", fullPage: true });
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await page.evaluate(() => window.document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+  await page.screenshot({ path: "test-results/led-measurement-mobile.png", fullPage: true });
+  expect(errors).toEqual([]);
+});
+
+
+test("incomplete unsaved notes offer manual recovery and cancel navigation", async ({ page }) => {
+  await page.addInitScript(() => { Storage.prototype.setItem = () => { throw new Error("Synthetic quota failure"); }; });
+  await page.goto("/bench/led");
+  await page.getByLabel("Bench notes", { exact: true }).fill("Keep this incomplete observation");
+  await expect(page.getByRole("status")).toContainText("Copy your entries");
+  await expect(page.getByRole("button", { name: "Download record JSON" })).toBeDisabled();
+  page.once("dialog", dialog => dialog.dismiss());
+  await page.getByRole("link", { name: "Build guide", exact: true }).click();
+  await expect(page).toHaveURL(/bench\/led/);
+  await expect(page.getByLabel("Bench notes", { exact: true })).toHaveValue("Keep this incomplete observation");
+});

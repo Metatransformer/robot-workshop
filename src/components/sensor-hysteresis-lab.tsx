@@ -297,6 +297,7 @@ export default function SensorHysteresisLab() {
           <div className="hysteresis-handoff-links">
             <Link className="hysteresis-button hysteresis-button-primary" href="/build-guides/sensor-led">Open the build guide</Link>
             <Link className="hysteresis-button" href="/?template=sensor-led">Open the source starter</Link>
+            <Link className="hysteresis-button" href="/bench/led">Record LED measurements</Link>
           </div>
         </section>
 

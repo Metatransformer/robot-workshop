@@ -10,6 +10,7 @@ export default function SensorLedBuildGuidePage() {
       <a href="/learn?project=sensor-led">Learn the supporting theory</a>
       <a href="/learn?lesson=voltage-current-resistance">Review the current calculation</a>
       <a href="/labs/hysteresis">Explore temperature hysteresis</a>
+      <a href="/bench/led">Record LED measurements</a>
       <a href="/bench/sensor">Inspect sensor readings</a>
     </nav>
     <PrintReport {...sensorLedGuide} backHref="/build-guides/sensor" />
