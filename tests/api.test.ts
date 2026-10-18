@@ -1,0 +1,50 @@
+import { afterAll, beforeAll, expect, it } from "vitest";
+import { mkdtemp, realpath, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { sessionToken } from "../src/server/security";
+import type { CatalogItem } from "../src/lib/contracts";
+let routes: typeof import("../src/app/api/workshop/route");
+let directory: string;
+let oldHome: string | undefined;
+beforeAll(async () => {
+  directory = await realpath(await mkdtemp(join(tmpdir(), "mt-api-")));
+  oldHome = process.env.METATRANSFORMER_HOME;
+  process.env.METATRANSFORMER_HOME = directory;
+  routes = await import("../src/app/api/workshop/route");
+});
+afterAll(async () => { if (oldHome === undefined) delete process.env.METATRANSFORMER_HOME; else process.env.METATRANSFORMER_HOME = oldHome; await rm(directory, { recursive: true, force: true }); });
+const headers = () => ({ host: "localhost:3000", origin: "http://localhost:3000", "x-workshop-token": sessionToken(), "content-type": "application/json" });
+const get = (query: string) => routes.GET(new Request(`http://localhost:3000/api/workshop?${query}`, { headers: headers() }));
+const post = (body: unknown) => routes.POST(new Request("http://localhost:3000/api/workshop", { method: "POST", headers: headers(), body: JSON.stringify(body) }));
+async function data(response: Response) { const json = await response.json(); expect(json.error).toBeUndefined(); expect(response.ok).toBe(true); return json.data; }
+it("rejects an unauthenticated inventory read before touching storage", async () => {
+  const response = await routes.GET(new Request("http://localhost:3000/api/workshop?action=bootstrap", { headers: { host: "localhost:3000" } }));
+  expect(response.status).toBe(401);
+});
+it("creates a real project, reviews a source claim, uses inventory separately, and exports its source", async () => {
+  const bootstrap = await data(await get("action=bootstrap"));
+  expect(bootstrap.templates.map((t: { id:string }) => t.id)).toContain("sensor");
+  const project = await data(await post({ action: "create", templateId: "sensor", title: "Workbench sensor" }));
+  expect(project.files.map((f: { path:string }) => f.path)).toContain("ENGINEERING.md");
+  const draft = await data(await post({ action: "ingest", text: "Example sensor\nVoltage: 3.3 V\nInterface: I2C", fileName: "sensor.txt" }));
+  expect(draft.specifications.length).toBeGreaterThan(0);
+  const now = new Date().toISOString();
+  const item: CatalogItem = { id: "test-sensor", name: "Imported sensor", kind: "part", category: "Sensors", description: "Reviewed sample", tags: [], sources: [draft.source], specs: draft.specifications.map((s: object, i: number) => i === 0 ? { ...s, value: "5" } : s), ownedQuantity: 2, notes: "private shelf note", version: 1, createdAt: now, updatedAt: now };
+  const saved = await data(await post({ action: "save-ingestion", draftId: draft.id, item }));
+  expect(saved.specs[0].evidence).toBe("manual");
+  const withPart = await data(await post({ action: "add-item", id: project.id, itemId: saved.id, quantity: 1 }));
+  expect(withPart.bom.some((row: {itemId:string}) => row.itemId === saved.id)).toBe(true);
+  const library = (await data(await get("action=bootstrap"))).library;
+  expect(library.find((row: CatalogItem) => row.id === saved.id).ownedQuantity).toBe(2);
+  const file = await data(await get(`action=file&id=${withPart.id}&path=ENGINEERING.md`));
+  const copy = await data(await post({ action: "save-file", id: withPart.id, path: file.path, content: `${file.content}\nBench observation pending.\n`, expectedHash: file.hash }));
+  expect(copy.id).not.toBe(withPart.id);
+  expect(withPart.id).not.toBe(project.id);
+  expect((await data(await get(`action=file&id=${withPart.id}&path=ENGINEERING.md`))).hash).toBe(file.hash);
+  const bundle = await data(await post({ action: "export", id: copy.id }));
+  expect(() => JSON.parse(bundle.content)).not.toThrow();
+  expect(bundle.content).not.toContain("private shelf note");
+  const traversal = await get(`action=file&id=${project.id}&path=..%2F..%2F.env`);
+  expect(traversal.ok).toBe(false);
+});

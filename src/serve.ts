@@ -1,0 +1,10 @@
+import { spawn } from "node:child_process";
+import { createRequire } from "node:module";
+const require = createRequire(import.meta.url);
+const mode = process.argv[2] === "start" ? "start" : "dev";
+const port = process.env.PORT || "3000";
+if (!/^\d+$/.test(port) || Number(port) < 1024 || Number(port) > 65535) throw new Error("PORT must be between 1024 and 65535.");
+const child = spawn(process.execPath, [require.resolve("next/dist/bin/next"), mode, "--hostname", "127.0.0.1", "--port", port], { stdio: "inherit", env: { ...process.env, PORT: port } });
+for (const signal of ["SIGINT", "SIGTERM"] as const) process.on(signal, () => child.kill(signal));
+child.on("exit", code => { process.exitCode = code ?? 1; });
+child.on("error", error => { console.error(error.message); process.exitCode = 1; });

@@ -1,0 +1,120 @@
+import { expect, test } from "@playwright/test";
+
+test("mechanism, engineering plan drafts, ingestion and export", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByRole("heading", { name: "Four-bar linkage", exact: true })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBeLessThanOrEqual(1000);
+  const slider = page.getByRole("slider", { name: "Crank length" });
+  await expect(slider).toHaveValue("25");
+  await page.getByRole("button", { name: "Play mechanism" }).click();
+  await expect(page.getByRole("button", { name: "Pause mechanism" })).toBeVisible();
+  await page.getByRole("button", { name: "Pause mechanism" }).click();
+  await page.screenshot({ path: "test-results/workshop-desktop.png", fullPage: true });
+  await page.getByRole("button", { name: "Engineering plan", exact: true }).first().click();
+  await page.getByRole("button", { name: "Edit text", exact: true }).click();
+  const editor = page.getByRole("textbox", { name: "Edit ENGINEERING.md" });
+  await expect(editor).toBeVisible();
+  const original = await editor.inputValue();
+  await editor.fill(`${original}\nBrowser QA observation: hardware test pending.\n`);
+  await page.getByRole("button", { name: "Overview", exact: true }).click();
+  await page.getByRole("button", { name: "Files", exact: true }).click();
+  await page.getByRole("button", { name: "Edit text", exact: true }).click();
+  await expect(page.getByRole("textbox", { name: "Edit ENGINEERING.md" })).toHaveValue(/Browser QA observation/);
+  await page.getByRole("button", { name: "Save as result copy", exact: true }).click();
+  await expect(page.getByText(/independent result copy/)).toBeVisible();
+  await page.getByRole("navigation", { name: "Main navigation" }).getByRole("button", { name: "Parts & tools", exact: true }).click();
+  await page.getByRole("button", { name: "Import datasheet", exact: true }).click();
+  await page.getByRole("textbox", { name: "Document text", exact: true }).fill("Browser QA part\nVoltage: 3.3 V\nInterface: I2C");
+  await page.getByRole("button", { name: "Extract locally", exact: true }).click();
+  const review = page.getByRole("dialog");
+  await review.getByRole("textbox", { name: "Name", exact: true }).fill("Browser QA part");
+  await review.getByRole("textbox", { name: "Specification 1 value", exact: true }).fill("5");
+  await review.getByRole("button", { name: "Save reviewed item", exact: true }).click();
+  await expect(page.getByRole("dialog").getByText("manual", { exact: true })).toBeVisible();
+  await page.screenshot({ path: "test-results/ingestion-reviewed.png", fullPage: true });
+  await page.getByRole("button", { name: "Close dialog", exact: true }).click();
+  await page.getByRole("navigation", { name: "Main navigation" }).getByRole("button", { name: "Workshop", exact: true }).click();
+  await page.getByRole("button", { name: "Export source", exact: true }).click();
+  const downloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Export selected", exact: true }).click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toMatch(/\.workshop\.json$/);
+});
+
+test("mobile opens on the artifact and can reach the engineering plan", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await expect(page.getByRole("heading", { name: "Four-bar linkage", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Open agent dock", exact: true })).toBeVisible();
+  await expect(page.getByRole("complementary", { name: "Agent workspace" })).toHaveCount(0);
+  const bodyWidth = await page.locator("body").evaluate(el => el.scrollWidth);
+  expect(bodyWidth).toBeLessThanOrEqual(390);
+  await page.getByRole("button", { name: "Engineering plan", exact: true }).first().click();
+  await expect(page.getByRole("button", { name: "Edit text", exact: true })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+  for (const name of ["Open navigation", "Open agent dock"]) {
+    const bounds = await page.getByRole("button", { name, exact: true }).boundingBox();
+    expect(bounds?.x).toBeGreaterThanOrEqual(0);
+    expect((bounds?.x ?? 0) + (bounds?.width ?? 0)).toBeLessThanOrEqual(390);
+  }
+  await page.screenshot({ path: "test-results/workshop-mobile.png", fullPage: true });
+});
+
+
+test("learning guides connect templates and glossary anchors", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Start here", exact: true }).first().click();
+  await expect(page.getByRole("heading", { name: "Start here — four-bar linkage", exact: true })).toBeVisible();
+  await page.screenshot({ path: "test-results/start-here.png", fullPage: true });
+  await page.getByRole("button", { name: "Learning path", exact: true }).first().click();
+  await page.getByRole("button", { name: "desk-robot tutorial", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Start a local project" });
+  await expect(dialog.getByRole("radio", { name: /One-servo desk creature/ })).toHaveAttribute("aria-checked", "true");
+  await dialog.getByRole("textbox", { name: "Project title", exact: true }).fill("Learning QA creature");
+  await dialog.getByRole("button", { name: "Create project", exact: true }).click();
+  await page.getByRole("button", { name: "Engineering plan", exact: true }).first().click();
+  await page.getByRole("button", { name: "torque", exact: true }).click();
+  await expect(page.locator("h2#torque")).toBeInViewport();
+  await page.getByRole("button", { name: "Learning path", exact: true }).first().click();
+  await page.getByRole("button", { name: "sensor tutorial", exact: true }).click();
+  await expect(dialog.getByRole("radio", { name: /Pico.*BME280/ })).toHaveAttribute("aria-checked", "true");
+  await dialog.getByRole("textbox", { name: "Project title", exact: true }).fill("Pico sensor learning build");
+  await dialog.getByRole("button", { name: "Create project", exact: true }).click();
+  await page.getByRole("button", { name: "Engineering plan", exact: true }).first().click();
+  await expect(page.getByRole("table")).toBeVisible();
+  await page.getByRole("button", { name: "hysteresis", exact: true }).click();
+  await expect(page.locator("h2#hysteresis")).toBeInViewport();
+  await page.screenshot({ path: "test-results/learning-glossary.png", fullPage: true });
+});
+
+test("native image and GLB files open as artifacts", async ({ page }) => {
+  const { createProject } = await import("../../src/server/store");
+  const { mkdir, writeFile } = await import("node:fs/promises");
+  const { join } = await import("node:path");
+  const project = await createProject({ title: `Artifact QA ${Date.now()}`, templateId: "blank" });
+  await mkdir(join(project.directory, "models"), { recursive: true });
+  const vertices = Buffer.alloc(36);
+  [0, 0, 0, 1, 0, 0, 0, 1, 0].forEach((value, index) => vertices.writeFloatLE(value, index * 4));
+  const document = { asset: { version: "2.0" }, scene: 0, scenes: [{ nodes: [0] }], nodes: [{ mesh: 0 }], meshes: [{ primitives: [{ attributes: { POSITION: 0 } }] }], buffers: [{ byteLength: 36 }], bufferViews: [{ buffer: 0, byteLength: 36, target: 34962 }], accessors: [{ bufferView: 0, componentType: 5126, count: 3, type: "VEC3", min: [0, 0, 0], max: [1, 1, 0] }] };
+  const raw = Buffer.from(JSON.stringify(document));
+  const json = Buffer.concat([raw, Buffer.alloc((4 - raw.length % 4) % 4, 32)]);
+  const glb = Buffer.alloc(28 + json.length + vertices.length);
+  glb.writeUInt32LE(0x46546c67, 0); glb.writeUInt32LE(2, 4); glb.writeUInt32LE(glb.length, 8);
+  glb.writeUInt32LE(json.length, 12); glb.writeUInt32LE(0x4e4f534a, 16); json.copy(glb, 20);
+  glb.writeUInt32LE(vertices.length, 20 + json.length); glb.writeUInt32LE(0x004e4942, 24 + json.length); vertices.copy(glb, 28 + json.length);
+  await writeFile(join(project.directory, "models/triangle.glb"), glb);
+  await writeFile(join(project.directory, "pixel.png"), Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a1ioAAAAASUVORK5CYII=", "base64"));
+  await page.goto("/");
+  await page.getByRole("button", { name: `${project.title} Local build`, exact: true }).click();
+  await page.getByRole("button", { name: "Files", exact: true }).click();
+  await page.getByRole("button", { name: /^pixel.png image/ }).click();
+  const image = page.getByRole("img", { name: "pixel.png", exact: true });
+  await expect(image).toBeVisible();
+  await expect.poll(() => image.evaluate((element) => (element as HTMLImageElement).naturalWidth)).toBe(1);
+  await page.getByRole("button", { name: /^models\/triangle.glb model/ }).click();
+  const preview = page.getByRole("region", { name: "3D preview of models/triangle.glb" });
+  await expect(preview).toBeVisible();
+  await expect(preview.getByRole("status")).toHaveCount(0);
+  await expect(preview.getByRole("alert")).toHaveCount(0);
+  await page.screenshot({ path: "test-results/native-model.png", fullPage: true });
+});
