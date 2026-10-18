@@ -12,6 +12,13 @@ import {
   type SensorLogParseSuccess,
   type SensorSample,
 } from "@/lib/sensor-log";
+import {
+  MAX_SENSOR_REPORT_BYTES,
+  SENSOR_REPORT_HARDWARE_VALIDATION,
+  SENSOR_REPORT_UNITS,
+  parseSensorReport,
+  type SensorReport,
+} from "@/lib/sensor-report";
 
 type DatasetOrigin = "synthetic" | "user-supplied-unverified";
 type PlotMetric = "temperature" | "humidity" | "pressure";
@@ -20,6 +27,9 @@ type AnalyzedDataset = SensorLogParseSuccess & {
   origin: DatasetOrigin;
   source: string;
   importedAt: string;
+  restoredReport?: {
+    originalSegmentCount: number;
+  };
 };
 
 const SYNTHETIC_EXAMPLE = `# Synthetic example — generated values, not hardware measurements
@@ -119,7 +129,12 @@ export default function SensorLogLab() {
   const [metric, setMetric] = useState<PlotMetric>("temperature");
   const [notesBySegment, setNotesBySegment] = useState<Record<string, string>>({});
   const [tablePage, setTablePage] = useState(0);
+  const [restorePreview, setRestorePreview] = useState<SensorReport | null>(null);
+  const [restoreError, setRestoreError] = useState("");
+  const [reportNotice, setReportNotice] = useState("");
+  const [restorePending, setRestorePending] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
+  const restoreFileInput = useRef<HTMLInputElement>(null);
   const sourceRevision = useRef(0);
 
   const selectedSegment = analysis?.segments[selectedSegmentIndex] ?? null;
@@ -133,6 +148,10 @@ export default function SensorLogLab() {
   const visibleSamples = selectedSegment?.samples.slice(tablePage * PAGE_SIZE, (tablePage + 1) * PAGE_SIZE) ?? [];
 
   const clearAnalysis = (message: string) => {
+    setRestorePreview(null);
+    setRestoreError("");
+    setRestorePending(false);
+    if (restoreFileInput.current) restoreFileInput.current.value = "";
     setAnalysis(null);
     setNotesBySegment({});
     setSelectedSegmentIndex(0);
@@ -142,6 +161,10 @@ export default function SensorLogLab() {
   };
 
   const commitAnalysis = (text: string, origin: DatasetOrigin, source: string) => {
+    setRestorePreview(null);
+    setRestoreError("");
+    setRestorePending(false);
+    if (restoreFileInput.current) restoreFileInput.current.value = "";
     const result = parseSensorLog(text);
     if (!result.ok) {
       clearAnalysis(result.error);
@@ -158,6 +181,10 @@ export default function SensorLogLab() {
 
   const editSource = (value: string) => {
     sourceRevision.current += 1;
+    setRestorePreview(null);
+    setRestoreError("");
+    setRestorePending(false);
+    if (restoreFileInput.current) restoreFileInput.current.value = "";
     setSourceText(value);
     setDraftOrigin("user-supplied-unverified");
     setDraftSource("pasted");
@@ -170,6 +197,10 @@ export default function SensorLogLab() {
     const file = input.files?.[0];
     if (!file) return;
     const revision = ++sourceRevision.current;
+    setRestorePreview(null);
+    setRestoreError("");
+    setRestorePending(false);
+    if (restoreFileInput.current) restoreFileInput.current.value = "";
     setStale(Boolean(analysis));
     if (!/\.(csv|txt)$/i.test(file.name)) {
       clearAnalysis("Choose a .csv or .txt serial capture.");
@@ -191,18 +222,107 @@ export default function SensorLogLab() {
     } catch {
       if (revision === sourceRevision.current) clearAnalysis("The selected file could not be read in this browser.");
     } finally {
-      input.value = "";
+      if (revision === sourceRevision.current) input.value = "";
     }
   };
 
   const loadSyntheticExample = () => {
     sourceRevision.current += 1;
+    setRestorePreview(null);
+    setRestoreError("");
+    setRestorePending(false);
+    if (restoreFileInput.current) restoreFileInput.current.value = "";
     setSourceText(SYNTHETIC_EXAMPLE);
     setDraftOrigin("synthetic");
     setDraftSource("built-in synthetic example");
     setStale(Boolean(analysis));
     setError("");
     if (fileInput.current) fileInput.current.value = "";
+  };
+
+  const reviewReportFile = async (event: ChangeEvent<HTMLInputElement>) => {
+    const input = event.currentTarget;
+    const file = input.files?.[0];
+    if (!file) return;
+    const revision = ++sourceRevision.current;
+    setRestorePreview(null);
+    setRestoreError("");
+    setRestorePending(true);
+
+    if (!/\.json$/i.test(file.name)) {
+      setRestorePending(false);
+      setRestoreError("Choose a .json observation report.");
+      input.value = "";
+      return;
+    }
+    if (file.size > MAX_SENSOR_REPORT_BYTES) {
+      setRestorePending(false);
+      setRestoreError("Observation report must be 16 MiB or smaller.");
+      input.value = "";
+      return;
+    }
+
+    try {
+      const text = await file.text();
+      if (revision !== sourceRevision.current) return;
+      setRestorePending(false);
+      const result = parseSensorReport(text);
+      if (!result.ok) {
+        setRestoreError(result.error);
+        return;
+      }
+      setRestorePreview(result.report);
+    } catch {
+      if (revision === sourceRevision.current) {
+        setRestorePending(false);
+        setRestoreError("The selected observation report could not be read in this browser.");
+      }
+    } finally {
+      if (revision === sourceRevision.current) input.value = "";
+    }
+  };
+
+  const cancelRestoration = () => {
+    sourceRevision.current += 1;
+    setRestorePreview(null);
+    setRestoreError("");
+    setRestorePending(false);
+    if (restoreFileInput.current) restoreFileInput.current.value = "";
+  };
+
+  const confirmRestoration = () => {
+    if (!restorePreview) return;
+    const report = restorePreview;
+    sourceRevision.current += 1;
+    setAnalysis({
+      ok: true,
+      segments: [{
+        id: report.selectedSegment.id,
+        index: report.selectedSegment.index,
+        startReason: report.selectedSegment.startReason,
+        samples: report.samples,
+      }],
+      issues: report.parseIssues,
+      totalValidRows: report.samples.length,
+      origin: report.origin,
+      source: report.source,
+      importedAt: report.importedAt,
+      restoredReport: { originalSegmentCount: report.selectedSegment.count },
+    });
+    setNotesBySegment({ [report.selectedSegment.id]: report.notes });
+    setSourceText("");
+    setDraftOrigin("user-supplied-unverified");
+    setDraftSource("pasted");
+    setSelectedSegmentIndex(0);
+    setTablePage(0);
+    setMetric("temperature");
+    setStale(false);
+    setError("");
+    setRestorePreview(null);
+    setRestoreError("");
+    setRestorePending(false);
+    if (fileInput.current) fileInput.current.value = "";
+    if (restoreFileInput.current) restoreFileInput.current.value = "";
   };
 
   const changeSegment = (value: number) => {
@@ -221,23 +341,21 @@ export default function SensorLogLab() {
       selectedSegment: {
         id: selectedSegment.id,
         index: selectedSegment.index,
-        count: analysis.segments.length,
+        count: analysis.restoredReport?.originalSegmentCount ?? analysis.segments.length,
         startReason: selectedSegment.startReason,
       },
       samples: selectedSegment.samples,
       summary,
       notes: notesBySegment[selectedSegment.id] ?? "",
       parseIssues: analysis.issues,
-      units: {
-        timestamp: "seconds since firmware startup",
-        temperature: "degrees Celsius",
-        humidity: "percent relative humidity",
-        pressure: "hectopascals",
-        led: "logged output state, 0 or 1",
-      },
-      hardwareValidation: "Hardware validation: not established by this import",
+      units: SENSOR_REPORT_UNITS,
+      hardwareValidation: SENSOR_REPORT_HARDWARE_VALIDATION,
     };
-    download(`sensor-observation-segment-${selectedSegment.index}.json`, JSON.stringify(report, null, 2), "application/json");
+    const contents = JSON.stringify(report, null, 2);
+    download(`sensor-observation-segment-${selectedSegment.index}.json`, contents, "application/json");
+    setReportNotice(new TextEncoder().encode(contents).byteLength > MAX_SENSOR_REPORT_BYTES
+      ? "Your report was downloaded, but exceeds the 16 MiB restoration limit. Keep that file; shorten notes or diagnostic input before making a restorable copy."
+      : "");
   };
 
   const exportCsv = () => {
@@ -311,13 +429,58 @@ export default function SensorLogLab() {
             <button className="sensor-button" type="button" onClick={loadSyntheticExample}>Load synthetic example</button>
           </div>
           <div className={draftOrigin === "synthetic" ? "sensor-origin is-synthetic" : "sensor-origin"}>
-            <strong>{draftOrigin === "synthetic" ? "Synthetic dataset" : "User-supplied, unverified"}</strong>
+            <strong>CSV draft: {draftOrigin === "synthetic" ? "Synthetic dataset" : "User-supplied, unverified"}</strong>
             <span>
               {draftOrigin === "synthetic"
                 ? "Generated values for exploring the interface; not measured hardware. Analyze when ready."
                 : "Pasted and imported values are shown as observations, not proof of sensor accuracy."}
             </span>
           </div>
+          {analysis?.restoredReport && !stale && (
+            <p className="sensor-restored-source" role="status">
+              <strong>Restored report loaded.</strong> The report did not include the original raw CSV, so the source field is intentionally blank. Paste or import CSV to begin a new analysis; the restored report remains below until you analyze the changed source.
+            </p>
+          )}
+          <div className="sensor-restore-picker">
+            <div>
+              <strong>Restore an observation report</strong>
+              <span>Review an existing version 1 JSON report locally before replacing this notebook. JSON files: up to 16 MiB.</span>
+            </div>
+            <label className="sensor-file-button">
+              <span>Restore observation report</span>
+              <input ref={restoreFileInput} type="file" accept=".json,application/json" onChange={reviewReportFile} />
+            </label>
+          </div>
+          {restorePending && (
+            <div className="sensor-restore-pending" role="status">
+              <span>Reading and validating the report locally…</span>
+              <button className="sensor-button" type="button" onClick={cancelRestoration}>Cancel restoration</button>
+            </div>
+          )}
+          {restoreError && <p className="sensor-error" role="alert"><strong>Report not restored.</strong> {restoreError} Your current work is unchanged.</p>}
+          {restorePreview && (
+            <section className="sensor-restore-review" aria-labelledby="sensor-restore-review-heading">
+              <span className="sensor-eyebrow">Local JSON preview</span>
+              <h3 id="sensor-restore-review-heading">Review observation report</h3>
+              <dl>
+                <div><dt>Recorded source</dt><dd>{restorePreview.source}</dd></div>
+                <div><dt>Recorded origin</dt><dd>{restorePreview.origin === "synthetic" ? "Synthetic" : "User-supplied, unverified"}</dd></div>
+                <div><dt>Samples in report</dt><dd>{restorePreview.samples.length.toLocaleString()}</dd></div>
+                <div><dt>Original selection</dt><dd>Segment {restorePreview.selectedSegment.index} of {restorePreview.selectedSegment.count}</dd></div>
+                <div><dt>Recomputed duration</dt><dd>{formatNumber(restorePreview.summary.durationSeconds)} s</dd></div>
+                <div><dt>Recomputed temperature</dt><dd>{formatNumber(restorePreview.summary.temperatureC.min)}–{formatNumber(restorePreview.summary.temperatureC.max)} °C</dd></div>
+                <div><dt>Recomputed humidity</dt><dd>{formatNumber(restorePreview.summary.humidityPct.min)}–{formatNumber(restorePreview.summary.humidityPct.max)} % RH</dd></div>
+                <div><dt>Recomputed pressure</dt><dd>{formatNumber(restorePreview.summary.pressureHpa.min)}–{formatNumber(restorePreview.summary.pressureHpa.max)} hPa</dd></div>
+              </dl>
+              <p><strong>Only this selected segment exists in the report.</strong> The other original segments and the original raw CSV are absent.</p>
+              <p>The summary shown after restoration is recomputed from the accepted samples. Imported source, origin, and dates are recorded provenance metadata, not independent verification.</p>
+              <p className="sensor-restore-warning"><strong>Restoring replaces the current analysis and all notebook notes.</strong> Download the existing observation report first if you need to keep it.</p>
+              <div className="sensor-import-actions">
+                <button className="sensor-button is-primary" type="button" onClick={confirmRestoration}>Restore and replace notebook</button>
+                <button className="sensor-button" type="button" onClick={cancelRestoration}>Cancel restoration</button>
+              </div>
+            </section>
+          )}
           {stale && (
             <p className="sensor-stale" role="status">
               <strong>Source changed.</strong> The preview below belongs to the previous analysis. Analyze readings to update it; downloads are disabled meanwhile.
@@ -335,12 +498,17 @@ export default function SensorLogLab() {
               </div>
 
               <p className="sensor-segment-reason">Analyzed source: {analysis.source} · {analysis.origin === "synthetic" ? "Synthetic dataset — not hardware measurements" : "User-supplied, unverified"}</p>
+              {analysis.restoredReport && (
+                <p className="sensor-restored-context">
+                  <strong>Loaded 1 segment: original segment {selectedSegment.index} of {analysis.restoredReport.originalSegmentCount}.</strong> Other segments and the original raw CSV were not included in the report. Imported provenance is recorded metadata, not independent verification.
+                </p>
+              )}
 
               <div className="sensor-import-summary" aria-label="Import summary">
                 <div><b>{analysis.totalValidRows.toLocaleString()}</b><span>Valid readings</span></div>
                 <div><b>{counts.skipped.toLocaleString()}</b><span>Skipped rows</span></div>
                 <div><b>{counts.diagnostics.toLocaleString()}</b><span>Diagnostics / restarts</span></div>
-                <div><b>{analysis.segments.length.toLocaleString()}</b><span>Recording segments</span></div>
+                <div><b>{analysis.segments.length.toLocaleString()}</b><span>{analysis.restoredReport ? "Loaded segments" : "Recording segments"}</span></div>
               </div>
 
               <div className="sensor-selectors">
@@ -398,7 +566,9 @@ export default function SensorLogLab() {
               <div>
                 <span className="sensor-eyebrow">Import trace</span>
                 <h2 id="sensor-issues-heading">Diagnostics and skipped input</h2>
-                <p>Comments, restarts, and rejected rows remain visible instead of being converted into readings.</p>
+                <p>{analysis.restoredReport
+                  ? "These saved issues refer to the whole original capture, including segments that are not present in this report."
+                  : "Comments, restarts, and rejected rows remain visible instead of being converted into readings."}</p>
               </div>
               {analysis.issues.length ? (
                 <ol>
@@ -426,11 +596,12 @@ export default function SensorLogLab() {
                   placeholder="Record expected versus observed behavior, setup details, disconnects, and uncertainties for this segment."
                 />
               </label>
-              <p className="sensor-privacy">Notes live in this tab until export. Downloads contain the selected segment; export each segment you want to keep. Nothing is stored in local storage or sent to a server.</p>
+              <p className="sensor-privacy">Notes live in this tab until export. Reports larger than 16 MiB can be saved but cannot be restored here. Downloads contain the selected segment; export each segment you want to keep. Nothing is stored in local storage or sent to a server.{analysis.restoredReport ? " The readings CSV is reconstructed from this segment and is not the absent original raw capture." : ""}</p>
               <div className="sensor-export-actions">
                 <button className="sensor-button is-primary" type="button" disabled={exportsDisabled} onClick={exportReport}>Download observation report</button>
                 <button className="sensor-button" type="button" disabled={exportsDisabled} onClick={exportCsv}>Download readings CSV</button>
               </div>
+              {reportNotice && <p className="sensor-stale" role="status">{reportNotice}</p>}
               <p className="sensor-validation">Hardware validation: not established by this import. LED values are logged outputs, not evidence of measurement accuracy.</p>
             </section>
           </>

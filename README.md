@@ -70,6 +70,10 @@ preserving existing inventory records and project files.
 At `/bench/sensor`, paste or import the starter firmware’s serial CSV, inspect
 separate recording segments and scatter plots, and export readings plus bench
 observations. Diagnostics and source line numbers remain in the JSON report.
+Version 1 observation JSON reports can be restored locally after a preview and
+explicit replacement confirmation. Restoration retains notes, recorded provenance
+and original segment numbering; it restores only the exported segment, not the
+absent original CSV or other segments. Reports up to 16 MiB are supported.
 This is a browser-local manual capture workflow; notes must be exported before
 closing the tab. Synthetic examples and user-supplied readings are distinguished;
 imports do not establish calibration or successful hardware assembly.

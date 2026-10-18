@@ -164,3 +164,33 @@ and integration hunks. No purchase, flashing or external publication occurred.
 Next: restore exported sensor observation reports into the notebook, retaining
 provenance and notes without silently replacing unsaved work. Keep physical servo
 validation explicitly pending; do not expand curriculum breadth to hide that gap.
+
+## Round 6 — reopen observation reports without losing evidence
+
+Implemented version 1 selected-segment JSON restoration with a local preview,
+explicit replace/cancel, and cancelable file reads. Original segment index/count,
+source lines, notes, recorded origin/source/import time and all capture issues
+survive re-export. Derived summaries are recomputed. Only the exported segment
+returns; raw CSV and absent segments are never reconstructed as original evidence.
+
+Independent critic caught a compatibility gap in proposed string limits. Root
+removed the arbitrary 8 MiB notes and 100,000 issue limits, retaining the advertised
+16 MiB total JSON limit. A long-note/long-diagnostic roundtrip passes. Larger
+reports remain downloadable, with an explicit cannot-restore notice and visible
+limit. Nothing is silently truncated. Critic accepted final source and actual
+rendered desktop/mobile screenshots; root clarified the top origin badge as
+CSV draft to distinguish it from a restored synthetic dataset's recorded origin.
+
+Root reproduced 160 tests across23 files, typecheck and production build. Five
+browser cases passed: prior capture/stale/provenance journey, delayed CSV read,
+export/reload/restore/re-export preserving exact evidence, canceled/unsupported
+restoration preserving current work, and cancellation of a pending report read.
+The first browser run failed an ambiguous alert selector because Next also owns
+an alert; the selector now targets the report error specifically. No assertion was
+weakened. Root audited the four-file worker allowlist and actual source/CSS hunks.
+Sol7385 finished; root added browser coverage, compatibility repair and docs.
+
+Next concrete gap: users' handwritten bench observations disappear if they close
+or reload the tab before exporting. Add an honest unsaved-work warning for edited
+observation notes, with export-aware behavior and tests, before adding automatic
+storage. Keep the current browser-local privacy contract and portable reports.

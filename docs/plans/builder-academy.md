@@ -249,3 +249,30 @@ Acceptance: export annotated segment, reload, restore, re-export without losing
 notes/provenance; malformed/unsupported reports cannot mutate the active notebook.
 No new curriculum, serial capture, hosted services or hardware execution. Obtain
 independent product critique and record the actual browser evidence before commit.
+
+## Cycle 6 — reopen a saved observation (2026-10-18)
+
+Sol7385 executes sensor-report-restore.md with a closed four-file allowlist.
+Root owns tests/e2e/sensor-report-restore.spec.ts and documentation. Existing v1
+exports contain one selected segment and all capture issues, not the full CSV;
+restoration must preserve that distinction, original segment identity and recorded
+provenance. Preview/cancel precede explicit replacement; malformed or late reads
+must preserve current work. Independent critic reviewing contract before source.
+
+Cycle 6 complete. Sol7385 finished within its four-file allowlist. Root repaired
+limit compatibility, added three restoration browser cases and clarified CSV-draft
+origin. Independent critic accepted actual source and desktop/mobile screenshots.
+160 unit tests, typecheck, build and all five sensor browser journeys passed.
+Report restoration is limited to one exported segment and16MiB; no original raw
+capture, hardware verification or hidden persistence is claimed.
+
+Next concrete package: prevent accidental loss of edited sensor bench notes on
+reload/navigation. Inspect the notebook's existing download and state lifecycle;
+use an explicit unsaved-notes model tied to segment/data identity, not a blanket
+warning for every visit. Successful selected-segment report download marks only
+that segment's current notes exported, not other segments. Editing again restores
+the warning. Respect canceled imports/restores and deliberate replacement warnings.
+Keep browser-local state; no localStorage, server or account. Scope likely
+sensor-log-lab.tsx plus dedicated tests; assign exact closed allowlist after design.
+Acceptance: edited notes warn before leaving, unedited visits don't; exporting one
+segment cannot clear another segment's unsaved notes; re-editing warns again.
