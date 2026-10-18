@@ -276,3 +276,34 @@ Keep browser-local state; no localStorage, server or account. Scope likely
 sensor-log-lab.tsx plus dedicated tests; assign exact closed allowlist after design.
 Acceptance: edited notes warn before leaving, unedited visits don't; exporting one
 segment cannot clear another segment's unsaved notes; re-editing warns again.
+
+## Cycle 7 — protect handwritten bench notes (2026-10-18)
+
+Sol11545 owns sensor-note-protection.md's closed three-file package. Root owns
+browser acceptance and docs. Existing links retain their destinations; guards
+apply to local Link navigation and browser unload where supported. Browser Back
+within the app is an explicit limitation; no router/history hacks or persistence.
+Malformed CSV now must preserve prior analysis/notes, and valid replacement asks
+before discarding changed notes. Report download baseline is segment-specific;
+CSV/issues downloads do not contain notes and cannot mark them exported.
+
+Cycle7 complete: note guards, invalid-input preservation and stale-analysis recovery
+are integrated. Worker11545 stopped after implementation to end duplicate browser
+verification; no worker file overrun found. Root reviewed actual diffs and reproduced
+165 tests, typecheck/build and nine browser journeys. Independent critic accepted
+after root repaired the 'cancel then cannot export' recovery trap. Browser warnings
+remain best-effort; source drafts are not autosaved or represented as analyzed data.
+
+Next concrete package: FS90 command explorer. Root first reads servo-firmware.ts's
+exact controller and existing teaching route patterns. New pure TS behavioral model
+plus focused UI: normal press, held during boot, stable release/repress, held past
+five-second timeout; prediction then timestamped button/state/pulse trace. Pair the
+session timeline with a20ms frame showing1500us=7.5% duty. Display command pulses
+and LED/state only, never inferred shaft angle, torque, power or hardware execution.
+Link exact starter/guide and timers-pwm lesson. Keep Python firmware unchanged and
+compare identical timelines against exported Python in differential tests, including
+sampling intervals/boundaries/rearm behavior. Scope closed new model/component/tests
+with root-owned route/guide links; no extra MCU simulator or curriculum breadth.
+Acceptance: explain boot lockout, release-before-rearm, timeout and why servo pulse
+width differs from a DC motor's power duty cycle; inspect desktop/mobile and obtain
+independent critique before checkpoint.

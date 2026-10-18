@@ -3,7 +3,7 @@
 import "./sensor-log-lab.css";
 
 import Link from "next/link";
-import { useMemo, useRef, useState, type ChangeEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
 import {
   MAX_SENSOR_LOG_BYTES,
   parseSensorLog,
@@ -12,6 +12,7 @@ import {
   type SensorLogParseSuccess,
   type SensorSample,
 } from "@/lib/sensor-log";
+import { changedSensorNoteSegmentIds } from "@/lib/sensor-note-state";
 import {
   MAX_SENSOR_REPORT_BYTES,
   SENSOR_REPORT_HARDWARE_VALIDATION,
@@ -128,14 +129,18 @@ export default function SensorLogLab() {
   const [selectedSegmentIndex, setSelectedSegmentIndex] = useState(0);
   const [metric, setMetric] = useState<PlotMetric>("temperature");
   const [notesBySegment, setNotesBySegment] = useState<Record<string, string>>({});
+  const [noteBaselinesBySegment, setNoteBaselinesBySegment] = useState<Record<string, string>>({});
   const [tablePage, setTablePage] = useState(0);
   const [restorePreview, setRestorePreview] = useState<SensorReport | null>(null);
   const [restoreError, setRestoreError] = useState("");
   const [reportNotice, setReportNotice] = useState("");
+  const [reportNoticeIsError, setReportNoticeIsError] = useState(false);
   const [restorePending, setRestorePending] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
   const restoreFileInput = useRef<HTMLInputElement>(null);
   const sourceRevision = useRef(0);
+  const notesBySegmentRef = useRef<Record<string, string>>({});
+  const noteBaselinesBySegmentRef = useRef<Record<string, string>>({});
 
   const selectedSegment = analysis?.segments[selectedSegmentIndex] ?? null;
   const summary = useMemo(
@@ -146,37 +151,52 @@ export default function SensorLogLab() {
   const exportsDisabled = !analysis || stale || !selectedSegment || !summary;
   const tablePageCount = selectedSegment ? Math.ceil(selectedSegment.samples.length / PAGE_SIZE) : 0;
   const visibleSamples = selectedSegment?.samples.slice(tablePage * PAGE_SIZE, (tablePage + 1) * PAGE_SIZE) ?? [];
+  const changedNoteSegmentIds = useMemo(
+    () => changedSensorNoteSegmentIds(notesBySegment, noteBaselinesBySegment),
+    [notesBySegment, noteBaselinesBySegment],
+  );
+  const hasChangedNotes = changedNoteSegmentIds.length > 0;
 
-  const clearAnalysis = (message: string) => {
-    setRestorePreview(null);
-    setRestoreError("");
-    setRestorePending(false);
-    if (restoreFileInput.current) restoreFileInput.current.value = "";
-    setAnalysis(null);
-    setNotesBySegment({});
-    setSelectedSegmentIndex(0);
-    setTablePage(0);
-    setStale(false);
-    setError(message);
+  useEffect(() => {
+    if (!hasChangedNotes) return;
+    const warnBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = "";
+    };
+    window.addEventListener("beforeunload", warnBeforeUnload);
+    return () => window.removeEventListener("beforeunload", warnBeforeUnload);
+  }, [hasChangedNotes]);
+
+  const replaceNoteState = (notes: Record<string, string>, baselines: Record<string, string>) => {
+    notesBySegmentRef.current = notes;
+    noteBaselinesBySegmentRef.current = baselines;
+    setNotesBySegment(notes);
+    setNoteBaselinesBySegment(baselines);
   };
 
-  const commitAnalysis = (text: string, origin: DatasetOrigin, source: string) => {
+  const hasChangedNotesNow = () => changedSensorNoteSegmentIds(
+    notesBySegmentRef.current,
+    noteBaselinesBySegmentRef.current,
+  ).length > 0;
+
+  const confirmDiscardChangedNotes = () => !hasChangedNotesNow() || window.confirm(
+    "Analyzing this CSV will replace the current analysis and its changed observation notes. Discard those note changes?",
+  );
+
+  const commitAnalysis = (result: SensorLogParseSuccess, origin: DatasetOrigin, source: string) => {
     setRestorePreview(null);
     setRestoreError("");
     setRestorePending(false);
     if (restoreFileInput.current) restoreFileInput.current.value = "";
-    const result = parseSensorLog(text);
-    if (!result.ok) {
-      clearAnalysis(result.error);
-      return;
-    }
     setAnalysis({ ...result, origin, source, importedAt: new Date().toISOString() });
-    setNotesBySegment({});
+    replaceNoteState({}, {});
     setSelectedSegmentIndex(0);
     setTablePage(0);
     setMetric("temperature");
     setStale(false);
     setError("");
+    setReportNotice("");
+    setReportNoticeIsError(false);
   };
 
   const editSource = (value: string) => {
@@ -192,35 +212,51 @@ export default function SensorLogLab() {
     setError("");
   };
 
+  const analyzeSource = () => {
+    const result = parseSensorLog(sourceText);
+    if (!result.ok) {
+      setError(result.error);
+      return;
+    }
+    if (!confirmDiscardChangedNotes()) return;
+    sourceRevision.current += 1;
+    commitAnalysis(result, draftOrigin, draftSource);
+  };
+
   const importFile = async (event: ChangeEvent<HTMLInputElement>) => {
     const input = event.currentTarget;
     const file = input.files?.[0];
     if (!file) return;
     const revision = ++sourceRevision.current;
     setRestorePreview(null);
-    setRestoreError("");
     setRestorePending(false);
+    setRestoreError("");
     if (restoreFileInput.current) restoreFileInput.current.value = "";
-    setStale(Boolean(analysis));
     if (!/\.(csv|txt)$/i.test(file.name)) {
-      clearAnalysis("Choose a .csv or .txt serial capture.");
+      setError("Choose a .csv or .txt serial capture.");
       input.value = "";
       return;
     }
     if (file.size > MAX_SENSOR_LOG_BYTES) {
-      clearAnalysis("Serial CSV must be 2 MiB or smaller.");
+      setError("Serial CSV must be 2 MiB or smaller.");
       input.value = "";
       return;
     }
     try {
       const text = await file.text();
       if (revision !== sourceRevision.current) return;
+      const result = parseSensorLog(text);
+      if (!result.ok) {
+        setError(result.error);
+        return;
+      }
+      if (!confirmDiscardChangedNotes()) return;
       setSourceText(text);
       setDraftOrigin("user-supplied-unverified");
       setDraftSource(file.name);
-      commitAnalysis(text, "user-supplied-unverified", file.name);
+      commitAnalysis(result, "user-supplied-unverified", file.name);
     } catch {
-      if (revision === sourceRevision.current) clearAnalysis("The selected file could not be read in this browser.");
+      if (revision === sourceRevision.current) setError("The selected file could not be read in this browser.");
     } finally {
       if (revision === sourceRevision.current) input.value = "";
     }
@@ -309,7 +345,8 @@ export default function SensorLogLab() {
       importedAt: report.importedAt,
       restoredReport: { originalSegmentCount: report.selectedSegment.count },
     });
-    setNotesBySegment({ [report.selectedSegment.id]: report.notes });
+    const restoredNotes = { [report.selectedSegment.id]: report.notes };
+    replaceNoteState(restoredNotes, restoredNotes);
     setSourceText("");
     setDraftOrigin("user-supplied-unverified");
     setDraftSource("pasted");
@@ -321,6 +358,8 @@ export default function SensorLogLab() {
     setRestorePreview(null);
     setRestoreError("");
     setRestorePending(false);
+    setReportNotice("");
+    setReportNoticeIsError(false);
     if (fileInput.current) fileInput.current.value = "";
     if (restoreFileInput.current) restoreFileInput.current.value = "";
   };
@@ -330,8 +369,23 @@ export default function SensorLogLab() {
     setTablePage(0);
   };
 
-  const exportReport = () => {
-    if (exportsDisabled || !analysis || !selectedSegment || !summary) return;
+  const updateSegmentNote = (segmentId: string, note: string) => {
+    const next = { ...notesBySegmentRef.current, [segmentId]: note };
+    notesBySegmentRef.current = next;
+    setNotesBySegment(next);
+  };
+
+  const confirmNoteNavigation = (event: { preventDefault: () => void }) => {
+    if (hasChangedNotes && !window.confirm(
+      "You have changed observation notes that are not included in a downloaded report. Leave this page? Export first to keep them.",
+    )) {
+      event.preventDefault();
+    }
+  };
+
+  const exportReport = (exportPreviousAnalysis = false) => {
+    if ((!exportPreviousAnalysis && exportsDisabled) || !analysis || !selectedSegment || !summary) return;
+    const exportedNote = notesBySegmentRef.current[selectedSegment.id] ?? "";
     const report = {
       version: 1,
       origin: analysis.origin,
@@ -346,16 +400,25 @@ export default function SensorLogLab() {
       },
       samples: selectedSegment.samples,
       summary,
-      notes: notesBySegment[selectedSegment.id] ?? "",
+      notes: exportedNote,
       parseIssues: analysis.issues,
       units: SENSOR_REPORT_UNITS,
       hardwareValidation: SENSOR_REPORT_HARDWARE_VALIDATION,
     };
     const contents = JSON.stringify(report, null, 2);
-    download(`sensor-observation-segment-${selectedSegment.index}.json`, contents, "application/json");
-    setReportNotice(new TextEncoder().encode(contents).byteLength > MAX_SENSOR_REPORT_BYTES
-      ? "Your report was downloaded, but exceeds the 16 MiB restoration limit. Keep that file; shorten notes or diagnostic input before making a restorable copy."
-      : "");
+    try {
+      download(`sensor-observation-segment-${selectedSegment.index}.json`, contents, "application/json");
+      const nextBaselines = { ...noteBaselinesBySegmentRef.current, [selectedSegment.id]: exportedNote };
+      noteBaselinesBySegmentRef.current = nextBaselines;
+      setNoteBaselinesBySegment(nextBaselines);
+      setReportNoticeIsError(false);
+      setReportNotice(new TextEncoder().encode(contents).byteLength > MAX_SENSOR_REPORT_BYTES
+        ? "Download started, but this report exceeds the 16 MiB restoration limit. Confirm the file is saved before relying on it; shorten notes or diagnostic input before making a restorable copy."
+        : "Download started. Confirm the file is saved before relying on it; the browser can cancel downloads.");
+    } catch {
+      setReportNoticeIsError(true);
+      setReportNotice("The observation report download could not be started. Note changes are still marked as unexported; try again.");
+    }
   };
 
   const exportCsv = () => {
@@ -388,11 +451,11 @@ export default function SensorLogLab() {
   return (
     <div className="sensor-shell">
       <header className="sensor-header">
-        <Link className="sensor-brand" href="/">Metatransformer <span>Workshop</span></Link>
+        <Link className="sensor-brand" href="/" onNavigate={confirmNoteNavigation}>Metatransformer <span>Workshop</span></Link>
         <nav aria-label="Sensor observation navigation">
-          <Link href="/">Workshop</Link>
-          <Link href="/build-guides/sensor">Sensor build guide</Link>
-          <Link href="/learn?lesson=measurement-instruments">Supporting theory</Link>
+          <Link href="/" onNavigate={confirmNoteNavigation}>Workshop</Link>
+          <Link href="/build-guides/sensor" onNavigate={confirmNoteNavigation}>Sensor build guide</Link>
+          <Link href="/learn?lesson=measurement-instruments" onNavigate={confirmNoteNavigation}>Supporting theory</Link>
         </nav>
       </header>
 
@@ -425,7 +488,7 @@ export default function SensorLogLab() {
               <span>Import serial CSV</span>
               <input ref={fileInput} type="file" accept=".csv,.txt,text/csv,text/plain" onChange={importFile} />
             </label>
-            <button className="sensor-button is-primary" type="button" disabled={Boolean(analysis) && !stale} onClick={() => { sourceRevision.current += 1; commitAnalysis(sourceText, draftOrigin, draftSource); }}>Analyze readings</button>
+            <button className="sensor-button is-primary" type="button" disabled={Boolean(analysis) && !stale} onClick={analyzeSource}>Analyze readings</button>
             <button className="sensor-button" type="button" onClick={loadSyntheticExample}>Load synthetic example</button>
           </div>
           <div className={draftOrigin === "synthetic" ? "sensor-origin is-synthetic" : "sensor-origin"}>
@@ -483,7 +546,7 @@ export default function SensorLogLab() {
           )}
           {stale && (
             <p className="sensor-stale" role="status">
-              <strong>Source changed.</strong> The preview below belongs to the previous analysis. Analyze readings to update it; downloads are disabled meanwhile.
+              <strong>Source changed.</strong> The preview below belongs to the previous analysis. Analyze readings to update it. Standard downloads are disabled; use “Export previous analysis and notes” below to keep the previous selected segment without this CSV draft.
             </p>
           )}
           {error && <p className="sensor-error" role="alert"><strong>Import not analyzed.</strong> {error}</p>}
@@ -592,16 +655,24 @@ export default function SensorLogLab() {
                 <span>Bench observations</span>
                 <textarea
                   value={notesBySegment[selectedSegment.id] ?? ""}
-                  onChange={(event) => setNotesBySegment((current) => ({ ...current, [selectedSegment.id]: event.target.value }))}
+                  onChange={(event) => updateSegmentNote(selectedSegment.id, event.target.value)}
                   placeholder="Record expected versus observed behavior, setup details, disconnects, and uncertainties for this segment."
                 />
               </label>
-              <p className="sensor-privacy">Notes live in this tab until export. Reports larger than 16 MiB can be saved but cannot be restored here. Downloads contain the selected segment; export each segment you want to keep. Nothing is stored in local storage or sent to a server.{analysis.restoredReport ? " The readings CSV is reconstructed from this segment and is not the absent original raw capture." : ""}</p>
+              <p className="sensor-privacy" role="status">
+                <strong>{changedNoteSegmentIds.length.toLocaleString()} {changedNoteSegmentIds.length === 1 ? "segment has" : "segments have"} changed notes.</strong>{" "}
+                A report download starts browser file handling; confirm the file is saved before relying on it.
+              </p>
+              <p className="sensor-privacy">Notes live in this tab until export. This protection is not autosave: reload and close warnings may be suppressed, and browser Back within the app may bypass them; export first. Reports larger than 16 MiB can be downloaded but cannot be restored here. Downloads contain the selected segment; export each segment you want to keep. Nothing is stored in local storage or sent to a server.{analysis.restoredReport ? " The readings CSV is reconstructed from this segment and is not the absent original raw capture." : ""}</p>
               <div className="sensor-export-actions">
-                <button className="sensor-button is-primary" type="button" disabled={exportsDisabled} onClick={exportReport}>Download observation report</button>
+                <button className="sensor-button is-primary" type="button" disabled={exportsDisabled} onClick={() => exportReport()}>Download observation report</button>
                 <button className="sensor-button" type="button" disabled={exportsDisabled} onClick={exportCsv}>Download readings CSV</button>
               </div>
-              {reportNotice && <p className="sensor-stale" role="status">{reportNotice}</p>}
+              {reportNotice && <p className="sensor-stale" role={reportNoticeIsError ? "alert" : "status"}>{reportNotice}</p>}
+              {stale && <div className="sensor-stale">
+                <p>The edited CSV draft is not included. Export the selected segment from the previous analysis with its current notes; choose other segments separately to keep their notes.</p>
+                <button className="sensor-button" type="button" onClick={() => exportReport(true)}>Export previous analysis and notes</button>
+              </div>}
               <p className="sensor-validation">Hardware validation: not established by this import. LED values are logged outputs, not evidence of measurement accuracy.</p>
             </section>
           </>

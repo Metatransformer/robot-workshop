@@ -56,7 +56,8 @@ test("sensor capture keeps segment evidence, stale state and synthetic origin di
   await page.screenshot({path:"test-results/sensor-observations-mobile.png",fullPage:true});
   await page.getByRole("textbox", { name: "Serial CSV", exact: true }).fill("timestamp_s,temp_c,humidity_pct,pressure_hpa,led,sensor_address,observation\n");
   await page.getByRole("button", { name: "Analyze readings", exact: true }).click();
-  await expect(page.getByRole("table", { name: "Recorded samples" })).toHaveCount(0);
+  await expect(page.getByRole("table", { name: "Recorded samples" })).toBeVisible();
+  await expect(page.getByRole("alert").filter({ hasText: "Import not analyzed" })).toBeVisible();
 });
 
 

@@ -75,7 +75,11 @@ explicit replacement confirmation. Restoration retains notes, recorded provenanc
 and original segment numbering; it restores only the exported segment, not the
 absent original CSV or other segments. Reports up to 16 MiB are supported.
 This is a browser-local manual capture workflow; notes must be exported before
-closing the tab. Synthetic examples and user-supplied readings are distinguished;
+closing the tab. Edited notes are tracked per segment, with navigation/reload
+warnings where the browser supports them. Exporting readings CSV does not mark
+notes exported. If you edit the CSV draft, you can still explicitly export the
+previous analysis and notes. This is not autosave; confirm downloads were saved.
+Synthetic examples and user-supplied readings are distinguished;
 imports do not establish calibration or successful hardware assembly.
 
 ## Learn, investigate, and test

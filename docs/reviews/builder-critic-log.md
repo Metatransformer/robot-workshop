@@ -194,3 +194,42 @@ Next concrete gap: users' handwritten bench observations disappear if they close
 or reload the tab before exporting. Add an honest unsaved-work warning for edited
 observation notes, with export-aware behavior and tests, before adding automatic
 storage. Keep the current browser-local privacy contract and portable reports.
+
+## Round 7 — protect notes and provide a real recovery path
+
+Edited notes now have per-segment export baselines. Restored notes begin clean;
+deleting or changing them is tracked. JSON report handoff marks only the exact
+exported segment's note text; readings CSV and issues exports do not. Existing
+brand/Workshop/build-guide/theory destinations are preserved, with Next onNavigate
+confirmation only for same-tab SPA navigation. beforeunload is attached only for
+changed notes. Visible wording distinguishes browser download handoff from saved
+files and acknowledges browser Back/suppressed-warning limitations; no autosave.
+
+Malformed CSV now preserves prior readings and notes. Valid replacement validates
+first, then asks before discarding changes using current refs, including notes
+typed during file reading. Root cleared obsolete JSON restoration previews when
+CSV selection invalidates their read token. Explicit report restoration retains
+its existing review/replace flow rather than adding another prompt.
+
+Independent critic reviewed source and actual screenshot, then found a recovery
+trap: editing CSV and canceling replacement left prior notes intact but downloads
+locked by stale state. Root added 'Export previous analysis and notes', explicitly
+excluding the CSV draft and exporting only the selected prior segment. Browser
+assertions verify old samples, current notes and original evidence, without
+committing the draft. Critic accepted the repair; stale-banner wording also fixed.
+
+Root reproduced165 tests across24 files, typecheck, production build and nine
+sensor browser journeys. Coverage includes per-segment baselines, CSV export not
+clearing notes, deletion/reversion, canceled link/replacement, malformed CSV,
+notes edited during delayed import, real reload cancellation, failed download,
+restoration and old capture flows. Initial reload test waited indefinitely on a
+canceled navigation; bounded the navigation wait without changing assertions.
+Worker independently started root-owned browser checks, colliding with artifacts;
+root stopped worker11545 and reran one authoritative suite successfully. No worker
+file-allowlist overrun was found. Root audited the helper/component/test hunks.
+No purchases, external publication, flashing or physical-validation claims.
+
+Next: the critic recommends an FS90 command explorer tied to the existing firmware:
+button/state/pulse timelines and20ms PWM frames, not simulated shaft motion. This
+moves learning toward understanding an actual starter instead of further notebook
+polish. Differential tests against the exported Python controller are the gate.
