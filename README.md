@@ -48,6 +48,33 @@ inventory, or import a PDF/text datasheet up to 24 MiB. Review the source beside
 before saving. Edited claims are marked manual. Scanned PDFs require manual text
 entry; the prototype does not include OCR or crawl supplier sites.
 
+Supported starter components also show exact supplier references and required,
+recorded-owned, and remaining quantities. Review the variant notes and complete the
+consumables list before ordering through the supplier. Prices, availability, carts,
+payment and affiliate fulfillment are not integrated.
+
+## Learn, investigate, and test
+
+Open `/learn` for 48 applied modules across measurement, electronics, mechanics,
+embedded programming, control and robotics. Worked examples, reasoning checks,
+bench exercises and a 254-term glossary connect to project learning paths. Reading,
+practice and recorded bench demonstrations are separate; browser-local progress
+can be exported and restored. This is an initial curriculum, not a complete degree
+or evidence that the example hardware has been physically tested.
+
+`/explore-objects` breaks down six everyday systems into energy flow, signals,
+subsystems and small experiments, with candidate parts and links back to projects.
+These studies are starting points, not complete appliance assembly instructions.
+
+`/labs` provides bounded RC, DC motor, power-budget and GPIO state-machine models.
+Models expose assumptions and limitations; the GPIO lab is not a microcontroller
+emulator. Record actual bench observations separately from predictions.
+
+Lessons and selected project files can be printed or saved as PDFs. Build packets
+include parts and evidence records; source-code files remain literal code. The
+current PDF format omits images and disables project-relative links, so share the
+source bundle as well when the build depends on diagrams or other files.
+
 ## Bring an agent
 
 See [agent setup](docs/agent-setup.md). Studio uses ACP over local stdio, with explicit

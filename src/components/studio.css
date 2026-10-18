@@ -423,3 +423,7 @@ textarea { resize: vertical; }
 .markdown-card th, .markdown-card td { padding: 10px; border: 1px solid var(--line); text-align: left; min-width: 100px; }
 .markdown-card th { background: var(--cream); }
 .project-meta { min-width: 0; overflow-wrap: anywhere; }
+
+.rail__items a { width: 100%; min-height: 57px; display: grid; place-items: center; gap: 3px; padding: 7px 2px; border-radius: 5px; color: #abb1ad; text-decoration: none; }
+.rail__items a span { font-size: .58rem; line-height: 1.05; }
+.rail__items a:hover { background: #303937; color: white; }
