@@ -5,7 +5,7 @@ portfolio prototype by Nick Bryant. Bring a coding agent, collect real parts, wr
 engineering plans, and build a project you can take into ordinary tools.
 
 - [Source on GitHub](https://github.com/Metatransformer/robot-workshop)
-- [Hosted showcase](https://robot-workshop.vercel.app)
+- [Hosted showcase](https://robot-workshop-omega.vercel.app)
 - [Project article](https://metatransformer.com/blog/ai-robot-workshop)
 
 See [the delivery handoff](docs/DELIVERY.md) for the guided starting path, verified capabilities and remaining limitations.

@@ -10,7 +10,7 @@ The project is now published as Nick Bryant's open-source portfolio prototype un
 the MIT License. Current publication links:
 
 - Source: https://github.com/Metatransformer/robot-workshop
-- Hosted showcase: https://robot-workshop.vercel.app
+- Hosted showcase: https://robot-workshop-omega.vercel.app
 - Article: https://metatransformer.com/blog/ai-robot-workshop
 
 ## Start here
