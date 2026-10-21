@@ -1,15 +1,37 @@
-# Metatransformer
+# AI Robot Workshop
 
-A local workshop for physical invention. Bring a coding agent, collect real parts,
-write engineering plans, and build a project you can take into ordinary tools.
+AI Robot Workshop is an open source, local-first physical invention and learning
+portfolio prototype by Nick Bryant. Bring a coding agent, collect real parts, write
+engineering plans, and build a project you can take into ordinary tools.
+
+- [Source on GitHub](https://github.com/Metatransformer/robot-workshop)
+- [Hosted showcase](https://robot-workshop.vercel.app)
+- [Project article](https://metatransformer.com/blog/ai-robot-workshop)
 
 See [the delivery handoff](docs/DELIVERY.md) for the guided starting path, verified capabilities and remaining limitations.
 
-## Run the workshop
+## Hosted showcase and local workshop
+
+The hosted showcase presents the learning, lab, guide, and browser-local worksheet
+surfaces. The complete workshop runs locally so project and agent operations stay
+on your machine.
+
+| Capability | Hosted showcase | Local workshop |
+| --- | --- | --- |
+| Learning modules, object studies, labs, and build guides | Yes | Yes |
+| Browser-local learning progress and worksheets | Yes | Yes |
+| Create, edit, validate, import, and export project directories | No | Yes |
+| Parts/tools inventory and specification ingestion | No | Yes |
+| ACP coding-agent sessions and permission decisions | No | Yes |
+| Access to local project files and workshop APIs | No | Yes |
+
+## Clone, install, and run locally
 
 Requires Node.js 22+ and pnpm 10.
 
 ```sh
+git clone https://github.com/Metatransformer/robot-workshop.git
+cd robot-workshop
 pnpm install
 pnpm dev
 ```
@@ -174,8 +196,32 @@ pnpm build
 
 Hosted accounts, public project pages, remix/discovery, social presentation exports,
 and the purchasing service are separate planned layers. Local development does not
-require cloud credentials. This repository has not been published as a release;
-license selection and third-party attribution review precede that release.
+require cloud credentials. This repository is published as an open-source portfolio
+prototype; it is not a packaged product release or evidence of physical validation.
+
+## Contributing
+
+Issues and pull requests are welcome. Keep changes focused, preserve the local-only
+boundary for project files and agent operations, and document any physical claims
+with their evidence and limitations. Install dependencies with `pnpm install`, then
+run the existing checks relevant to your change:
+
+```sh
+pnpm typecheck
+pnpm test
+pnpm build
+```
+
+For browser-facing route or interaction changes, also run the acceptance flow in
+[Browser checks](#browser-checks) with `pnpm test:e2e`.
+
+## License and third-party notices
+
+The original project source is available under the [MIT License](LICENSE). Direct
+dependencies keep their own licenses and notices; see
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for the installed inventory and
+important boundaries around manufacturer references, separately installed
+CircuitPython drivers, and user-imported material.
 
 ## Browser checks
 

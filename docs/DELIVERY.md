@@ -1,4 +1,4 @@
-# Metatransformer — local prototype handoff
+# AI Robot Workshop — local prototype handoff
 
 Delivered as a local-first workshop in /Users/nickbryant/robot-workshop. The autonomous
 improvement loop is paused at the user's request to finish and deliver. No further
@@ -6,11 +6,19 @@ expansion is scheduled. This is a usable prototype, not a physically validated e
 A hosted showcase was subsequently deployed at the user’s request; local agent and
 project-file operations remain local-only.
 
+The project is now published as Nick Bryant's open-source portfolio prototype under
+the MIT License. Current publication links:
+
+- Source: https://github.com/Metatransformer/robot-workshop
+- Hosted showcase: https://robot-workshop.vercel.app
+- Article: https://metatransformer.com/blog/ai-robot-workshop
+
 ## Start here
 
 The current development instance uses http://127.0.0.1:3100.
 To start it yourself: `PORT=3100 pnpm dev` from the repository (Node 22+, pnpm 10).
-The default without PORT is 3000. Keep it local; this is not a hosted deployment.
+The default without PORT is 3000. Keep that development server local; the separate
+hosted showcase intentionally excludes project-file and agent operations.
 
 1. Open /learn to browse 48 applied modules across six tracks, linked prerequisites,
    worked examples, exercises and a 254-term advanced glossary. Reading, practice
@@ -60,9 +68,10 @@ product-level check. Claude/OpenCode adapters remain optional setup, not verifie
 installations. Candidate directories are not an operating-system sandbox.
 
 Hosted accounts/public project pages, social discovery/remixing, polished share
-cards, affiliate purchasing/fulfillment, Electron packaging and a public release
-are still future work. No open-source license file has been selected; resolve that
-before publishing. No Supabase cloud credentials are needed by this local prototype.
+cards, affiliate purchasing/fulfillment, Electron packaging and packaged releases
+are still future work. The portfolio source is published under MIT; third-party
+materials and user imports retain their own rights. No Supabase cloud credentials
+are needed by this local prototype.
 
 ## Evidence and maintenance
 

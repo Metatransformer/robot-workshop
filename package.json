@@ -1,7 +1,8 @@
 {
-  "name": "metatransformer",
+  "name": "robot-workshop",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "type": "module",
   "packageManager": "pnpm@10.28.2",
   "scripts": {
